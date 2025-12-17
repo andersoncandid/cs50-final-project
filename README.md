@@ -1,2 +1,4 @@
-# cs50-final-project
-My final project for the CS50x course.
+# EASYBUFFET — CUSTOM BUFFET ORDERING PLATFORM
+#### Video Demo:  <URL HERE>
+#### Description:
+TODO
