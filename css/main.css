@@ -1,4 +1,9 @@
 /* Base */
+:root {
+  --primary-color: #e2781a;
+  --secondary-color: #000000;
+}
+
 body {
   font-family:
     system-ui,

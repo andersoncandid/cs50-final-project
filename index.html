@@ -13,7 +13,7 @@
   <body>
     <!-- Header Section -->
     <header class="container header">
-      <div class="logo">
+      <div class="logo header-logo">
         <a href="index.html" class="logo-icon"
           ><img src="img/icons/logo.png" alt="Open pot logo" height="32" /><span
             class="logo-text handwrite-font"
@@ -115,8 +115,8 @@
               <option value="49">49</option>
               <option value="50" selected="selected">50</option>
             </select>
-            <a href="menus/menu-1.html">
-              <span class="to-menu">Ver cardápio</span>
+            <a href="/menu/<id>">
+              <span class="to-menu">Personalizar</span>
             </a>
           </div>
         </div>
@@ -188,8 +188,8 @@
               <option value="49">49</option>
               <option value="50" selected="selected">50</option>
             </select>
-            <a href="menus/menu-2.html">
-              <span class="to-menu">Ver cardápio</span>
+            <a href="/menu/<id>">
+              <span class="to-menu">Personalizar</span>
             </a>
           </div>
         </div>
@@ -260,20 +260,56 @@
               <option value="49">49</option>
               <option value="50" selected="selected">50</option>
             </select>
-            <a href="menus/menu-3.html">
-              <span class="to-menu">Ver cardápio</span>
+            <a href="/menu/<id>">
+              <span class="to-menu">Personalizar</span>
             </a>
           </div>
         </div>
       </div>
     </section>
-    <!-- grid de 3 cardapios -->
-    <!-- Cada card: -->
-    <!-- -imagem pequena (opcional) -->
-    <!-- -título do menu (ex: “Buffet Tradicional”) -->
-    <!-- -descrição curta (1-2 linhas) -->
-    <!-- -preço base (opcional) -->
-    <!-- -botão primário “Personalizar” → link /menu/<id> -->
+
     <!-- Footer Section -->
+    <footer class="container footer">
+      <div class="l-footer">
+        <div class="logo footer-logo">
+          <a href="index.html" class="logo-icon"
+            ><img
+              src="img/icons/logo.png"
+              alt="Open pot logo"
+              height="32"
+            /><span class="logo-text handwrite-font">Cozinha Familiar</span></a
+          >
+        </div>
+
+        <div class="footer-contact">
+          <h5>Contato</h5>
+          <a
+            href="https://api.whatsapp.com/send?1=pt_BR&amp;phone=5511995257545"
+            target="_blank"
+            class="footer-whats"
+          >
+            <img
+              src="img/icons/whatsapp-logo.svg"
+              alt="Whatsapp"
+              class="footer-whats-img"
+            />
+            </a <span class="footer-whats-text">Whatsapp (XX) XXXXX-XXXX</span>
+          >
+          <a href="mailto:email@gmail.com" target="_blank" class="footer-mail"
+            ><img
+              src="img/icons/mail.svg"
+              alt="Mail Logo"
+              class="footer-mail-img" /></a
+          ><span class="footer-mail-text">email@gmail.com</span>
+          <div class="footer-address">
+            <img src="img/icons/marker.svg" alt="Map Marker" />
+            <span class="footer-address-text"
+              >R. Das Flores, XXX - Centro - Tupi Paulista / SP -
+              17930-000</span
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
