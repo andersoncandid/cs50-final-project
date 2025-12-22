@@ -18,7 +18,7 @@
   align-items: center;
   text-align: center;
   position: relative;
-  min-height: 50vh;
+  min-height: clamp(20rem, 45vh, 30rem);
   width: 100%;
   overflow: hidden;
   margin: 0;
