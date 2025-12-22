@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Damion&family=Parisienne&display=swap");
+
+/* Base */
+:root {
+  --primary-custom-color: #e2781a;
+}
+
+.handwriting-font {
+  font-family: "Damion", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  min-height: 50vh;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.hero .hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.l-hero {
+  position: relative;
+  z-index: 1;
+}
+
+.hero .hero-title {
+  font-size: 3em;
+  color: white;
+  text-shadow:
+    1px 1px 1px black,
+    2px 2px 1px black;
+}
+
+.hero .hero-text {
+  font-size: 1.3em;
+  color: white;
+  font-weight: 600;
+  text-shadow:
+    0.5px 0.5px 0.5px black,
+    1px 1px 0.5px black;
+}
+
+/* Cards Section - Menu */
+.menu {
+  padding: 4rem 0;
+}
+
+.menu-title {
+  margin-bottom: 4rem;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.card {
+  width: 20rem;
+}
+
+/* .menu-card { */
+/*   text-decoration: none; */
+/*   color: inherit; */
+/*   background: #fff; */
+/*   border: 1px solid #eee; */
+/*   border-radius: 8px; */
+/*   /* overflow: hidden; */ */
+/*   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04); */
+/*   min-width: 220px; */
+/*   max-width: 340px; */
+/*   position: relative; */
+/* } */
+
+/* .card-img-wrapper { */
+/*   overflow: hidden; */
+/* } */
+/**/
+/* .card-img-wrapper img { */
+/*   width: 150px; */
+/*   height: auto; */
+/*   object-fit: cover; */
+/*   display: block; */
+/* } */
+/* .menu-img { */
+/*   width: 180px;  */
+/*   height: 180px; */
+  /* object-fit: cover; */
+  /* display: block; */
+  /* transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); */
+  /* transform-origin: center center; */
+  /* will-change: transform; */
+/* } */
+
+/* .menu-card:hover .menu-card-img { */
+/*   transform: scale(1.12); */
+/* } */
+
+
+
