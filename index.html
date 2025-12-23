@@ -13,7 +13,7 @@
     />
 
     <!-- Custom CSS  -->
-    <link rel="stylesheet" href="css/custom.css" />
+    <link rel="stylesheet" href="css/main.css" />
 
     <!-- Bootstrap script -->
     <script
@@ -24,15 +24,15 @@
     ></script>
 
     <!-- Custom script -->
-    <script defer src="js/custom.js"></script>
+    <script defer src="js/main.js"></script>
   </head>
 
   <body>
     <!-- Header Section -->
     <header class="header">
-      <nav class="navbar navbar-dark navbar-expand-md bg-dark bg-gradient">
+      <nav class="navbar navbar-dark navbar-expand-md bg-black bg-gradient">
         <div class="container px-5">
-          <a class="navbar-brand d-flex align-items-baseline gap-1" href="#">
+          <a class="navbar-brand d-flex align-items-baseline gap-1" href="/">
             <img
               class="logo-icon"
               src="img/icons/logo.png"
@@ -40,7 +40,7 @@
               height="30"
               aria-hidden="true"
             />
-            <span class="logo-text fs-3 handwriting-font"
+            <span class="logo-text fs-3 cursive-font"
               >Cozinha Familiar</span
             >
           </a>
@@ -92,7 +92,7 @@
         alt="Buffet Image"
       />
       <div class="l-hero">
-        <h1 class="hero-title handwriting-font">Pedidos Personalizados!</h1>
+        <h1 class="hero-title cursive-font">Pedidos Personalizados!</h1>
         <p class="hero-text px-2">
           Escolha seu cardápio, personalize e faça seu pedido.
         </p>
@@ -100,9 +100,9 @@
     </section>
 
     <!-- Menu Section -->
-    <section class="menu bg-body-tertiary">
-      <div class="container">
-        <h2 class="menu-title text-body-emphasis text-center">CARDÁPIOS</h2>
+    <section class="menu py-4 py-md-5 bg-secondary-subtle">
+      <div class="container py-3 py-md-4">
+        <h1 class="menu-title pb-3 pb-md-4 mb-4 text-body-emphasis text-center cursive-font">CARDÁPIOS</h1>
         <div
           class="d-flex flex-wrap justify-content-center justify-content-md-evenly gap-5"
         >
@@ -119,7 +119,7 @@
               <p class="card-text">Pequena descriçao do prato e conteudo</p>
               <div class="card-action">
                 <span class="price">R$ 20</span>
-                <span class="qtn">/por pessoa</span>
+                <span class="qtn pe-1">/por pessoa</span>
                 <a href="/menus/comida-italiana/" class="btn btn-custom"
                   >Ver Cardápio</a
                 >
@@ -140,7 +140,7 @@
               <p class="card-text">Pequena descriçao do prato e conteudo</p>
               <div class="card-action">
                 <span class="price">R$ 30</span>
-                <span class="qtn">/por pessoa</span>
+                <span class="qtn pe-1">/por pessoa</span>
                 <a href="/menus/frango-assado/" class="btn btn-custom"
                   >Ver Cardápio</a
                 >
@@ -161,7 +161,7 @@
               <p class="card-text">Pequena descriçao do prato e conteudo</p>
               <div class="card-action">
                 <span class="price">R$ 40</span>
-                <span class="qtn">/por pessoa</span>
+                <span class="qtn pe-1">/por pessoa</span>
                 <a href="/menus/carne-ao-molho/" class="btn btn-custom"
                   >Ver Cardápio</a
                 >
@@ -171,5 +171,47 @@
         </div>
       </div>
     </section>
+
+    <!-- Footer Section -->
+    <footer class="footer-bar py-3 py-md-4 bg-black bg-gradient">
+      <div class="container py-3 py-md-4">
+        <div class="footer-logo container mb-4">
+          <a
+            cltext-center
+            class="navbar-brand d-flex flex-column align-items-center"
+            href="/"
+          >
+            <img
+              class="logo-icon"
+              src="img/icons/logo.png"
+              alt="Logo"
+              height="30"
+              aria-hidden="true"
+            />
+            <span class="logo-text fs-3 cursive-font footer-text"
+              >Cozinha Familiar</span
+            >
+          </a>
+        </div>
+
+        <ul class="nav justify-content-center">
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 footer-text">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 footer-text">Features</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 footer-text">Pricing</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 footer-text">FAQs</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link px-2 footer-text">About</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
   </body>
 </html>

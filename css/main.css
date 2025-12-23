@@ -5,6 +5,7 @@
   --primary-custom-color: #e2781a;
 }
 
+
 .btn-custom {
   --bs-btn-color: #fff;
   --bs-btn-bg: #e2781a;
@@ -21,7 +22,7 @@
   --bs-btn-disabled-border-color: #e2781a;
 }
 
-.handwriting-font {
+.cursive-font {
   font-family: "Damion", cursive;
   font-weight: 400;
   font-style: normal;
@@ -74,12 +75,7 @@
 }
 
 /* Cards Section - Menu */
-.menu {
-  padding: 4rem 0;
-}
-
 .menu-title {
-  margin-bottom: 4rem;
   line-height: 1.1;
   font-weight: 700;
 }
@@ -122,5 +118,10 @@
 
 .qtn {
   color: var(--primary-custom-color);
-  padding-right: 1rem;
 }
+
+/* Footer */
+.footer-text {
+  color: #fff;
+}
+
