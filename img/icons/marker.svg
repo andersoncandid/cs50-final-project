@@ -1,9 +1,6 @@
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#000000">
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-<g id="SVGRepo_iconCarrier">
-<path d="M512 85.333333c-164.949333 0-298.666667 133.738667-298.666667 298.666667 0 164.949333 298.666667 554.666667 298.666667 554.666667s298.666667-389.717333 298.666667-554.666667c0-164.928-133.717333-298.666667-298.666667-298.666667z m0 448a149.333333 149.333333 0 1 1 0-298.666666 149.333333 149.333333 0 0 1 0 298.666666z" fill="#e2781a"/>
-</g>
-</svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0 0 32 32" version="1.1">
+<g id="surface1">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(88.627452%,47.058824%,10.196079%);fill-opacity:1;" d="M 16 2.667969 C 10.84375 2.667969 6.667969 6.847656 6.667969 12 C 6.667969 17.15625 16 29.332031 16 29.332031 C 16 29.332031 25.332031 17.15625 25.332031 12 C 25.332031 6.847656 21.15625 2.667969 16 2.667969 Z M 16 16.667969 C 13.421875 16.667969 11.332031 14.578125 11.332031 12 C 11.332031 9.421875 13.421875 7.332031 16 7.332031 C 18.578125 7.332031 20.667969 9.421875 20.667969 12 C 20.667969 14.578125 18.578125 16.667969 16 16.667969 Z M 16 16.667969 "/>
+</g>
+</svg>

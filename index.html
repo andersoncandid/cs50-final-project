@@ -40,9 +40,7 @@
               height="30"
               aria-hidden="true"
             />
-            <span class="logo-text fs-3 cursive-font"
-              >Cozinha Familiar</span
-            >
+            <span class="logo-text fs-3 cursive-font">Cozinha Familiar</span>
           </a>
 
           <button
@@ -100,9 +98,13 @@
     </section>
 
     <!-- Menu Section -->
-    <section class="menu py-4 py-md-5 bg-secondary-subtle">
+    <section class="menu py-4 py-md-5 bg-body-tertiary">
       <div class="container py-3 py-md-4">
-        <h1 class="menu-title pb-3 pb-md-4 mb-4 text-body-emphasis text-center cursive-font">CARDÁPIOS</h1>
+        <h1
+          class="menu-title pb-3 pb-md-4 mb-4 text-body-emphasis text-center cursive-font"
+        >
+          CARDÁPIOS
+        </h1>
         <div
           class="d-flex flex-wrap justify-content-center justify-content-md-evenly gap-5"
         >
@@ -174,11 +176,14 @@
 
     <!-- Footer Section -->
     <footer class="footer-bar py-3 py-md-4 bg-black bg-gradient">
-      <div class="container py-3 py-md-4">
-        <div class="footer-logo container mb-4">
+      <div
+        class="container py-3 py-md-4 d-flex flex-wrap gap-2 justify-content-around align-items-center"
+      >
+        <!-- Left side of the footer -->
+        <div class="pe-3 pe-md-0">
           <a
             cltext-center
-            class="navbar-brand d-flex flex-column align-items-center"
+            class="navbar-brand d-flex align-items-baseline gap-1"
             href="/"
           >
             <img
@@ -194,23 +199,65 @@
           </a>
         </div>
 
-        <ul class="nav justify-content-center">
-          <li class="nav-item">
-            <a href="#" class="nav-link px-2 footer-text">Home</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link px-2 footer-text">Features</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link px-2 footer-text">Pricing</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link px-2 footer-text">FAQs</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link px-2 footer-text">About</a>
-          </li>
-        </ul>
+        <!-- Right side of the footer -->
+        <div
+          class="footer-contact d-flex align-items-center"
+        >
+          <ul
+            class="nav footer-contact d-flex flex-wrap flex-column align-items-start footer-text"
+          >
+            <li class="nav-item">
+              <a class="nav-link mb-2 disabled" aria-disabled="true">
+                <span class="fs-5 text-white fw-bold">Contato</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="https://api.whatsapp.com/send?1=pt_BR&amp;phone=5511995257545"
+                target="_blank"
+                class="nav-link py-1 footer-text"
+              >
+                <img
+                  src="img/icons/whatsapp.png"
+                  alt="Whatsapp"
+                  class="contact-img"
+                />
+                <span class="whats-number">(00) 00000-0000</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="mailto:email@gmail.com"
+                target="_blank"
+                class="nav-link footer-text"
+              >
+                <img
+                  src="img/icons/mail.svg"
+                  alt="Mail Logo"
+                  class="contact-img pe-1"
+                />
+                <span class="mail-text"> email@gmail.com</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="https://www.google.com/maps?q=Av.+Paulista,+1000,+São+Paulo"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="nav-link footer-text"
+              >
+                <img
+                  src="img/icons/marker.svg"
+                  class="contact-img"
+                  alt="Map Marker"
+                />
+                <span class="address-text"
+                  >Av. Paulista, 1000 - Bela Vista - São Paulo/SP
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </footer>
   </body>
