@@ -5,6 +5,9 @@
   --primary-custom-color: #e2781a;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 
 .btn-custom {
   --bs-btn-color: #fff;
