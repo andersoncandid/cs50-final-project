@@ -131,3 +131,8 @@ html {
 .contact-img {
   height: 18px;
 }
+
+/* Form (menu pages) */
+.form-img {
+ opacity: 0.9;
+}
