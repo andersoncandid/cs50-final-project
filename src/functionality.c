@@ -1,7 +1,11 @@
+// Declares the program's functionality
+
 #include <stdio.h>
 #include <string.h>
 
+#include "structs.h"
 
+// Safe string handling
 int string_input (char *buffer, size_t buffer_size) {
     if (fgets (buffer, buffer_size, stdin) == NULL) {
         return 1; // Input error
@@ -29,8 +33,22 @@ int string_input (char *buffer, size_t buffer_size) {
     return 0;
 }
 
-//   if (string_input(nome, sizeof(nome)) == 2) {
-//   struct.key = ""; // Em caso de entrada vazia uma string vazia é
-//   adicionada
-//                    // ao registro
-// }
+// Add new entry
+int add_new (study_log *logs_arr,int *arr_size, int *free_space) {
+    char buffer[1024];
+    int input_return;
+
+    // Find the first empty index at the end of the array
+
+    int arr_tail = (sizeof (*logs_arr) / sizeof (logs_arr[0])) - *free_space;
+
+    printf ("Enter the Subject:\n");
+    input_return = string_input (buffer, sizeof (buffer));
+
+    if (input_return == 2) {
+        strcpy (logs_arr->subject, "");
+    } else {
+        strcpy (logs_arr->subject, buffer);
+    }
+    return 0;
+}

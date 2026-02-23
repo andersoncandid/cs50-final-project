@@ -1,0 +1,16 @@
+---
+# Basear-se em um estilo padrão (LLVM, Google, Chromium, Mozilla, WebKit)
+BasedOnStyle: LLVM
+
+# Quantidade de espaços na indentação
+IndentWidth: 4
+
+# Se deve usar tabs ou espaços (Never = Apenas espaços)
+UseTab: Never
+
+# Largura máxima da linha antes de quebrar
+ColumnLimit: 100
+
+# Adiciona um espaço antes de parênteses em blocos de controle (if, for, while)
+SpaceBeforeParens: Always
+---

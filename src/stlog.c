@@ -4,81 +4,76 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#define ENTRY_LENGTH 128
-#define DATE_LENGTH 20
-#define FREE_SPACE 100
-
-typedef enum { IN_PROGRESS, FINISHED, REMOVED } study_status;
-
-// Study record structure
-typedef struct {
-    int ID;
-    char subject[ENTRY_LENGTH];
-    char topic[ENTRY_LENGTH];
-    char start_date[DATE_LENGTH];
-    char end_date[DATE_LENGTH];
-    study_status status;
-} study_log;
+#include "functionality.h"
+#include "structs.h"
 
 // Last ID entry
 int last_ID;
 
-// Functions prototypes
+// Prototype
 int file_exists (const char *file_name);
-long int find_size (const char *file_name);
+int count_rows (const char *file_name);
 int csv_parser (study_log *logs_arr, const char *file_name);
 
 int main () {
 
-    char *file_name = "../userdata/study.csv";
+    char *file_name = "userdata/study.csv";
 
-    // Create a new csv file even if it doesn't exist.
+    // Create a new csv file if it doesn't exist.
     if (file_exists (file_name) == 0) {
         FILE *new_file = fopen (file_name, "w");
         if (new_file == NULL) {
             printf ("Error: The study.csv file could not be opened.\n");
-            fclose (new_file);
+
             return 1;
         }
         fclose (new_file);
     }
 
-    // Get the size of the CSV file.
-    int file_size = find_size (file_name);
-    if (file_size == -1) {
+    // Get the number of rows without the header
+    int rows = count_rows (file_name) - 1;
+    if (rows == -1) {
         return 1;
     }
 
     // Create a array of dynamic size
     int free_space = FREE_SPACE;
 
-    study_log *logs = malloc ((file_size + free_space) * sizeof (study_log));
-    if (logs == NULL) {
+    study_log *logs_arr = malloc ((rows + free_space) * sizeof (study_log));
+    if (logs_arr == NULL) {
         return 1;
     } // TODO:Checar size e usar realloc dentro da função Add_new
 
-    // Load data into logs_arr
-    csv_parser (logs, file_name);
+    // Load data into logs_arr_arr
+    csv_parser (logs_arr, file_name);
+
+    int arr_size = (rows + free_space);
+
+    // add_new (logs_arr, &arr_size, &free_space);
 
     // Tests
-    printf ("ID: %d\n", logs->ID);
-    printf ("Subject: %s\n", logs->subject);
-    printf ("Topic: %s\n", logs->topic);
-    printf ("Start Date: %s\n", logs->start_date);
-    printf ("End Date: %s\n", logs->end_date);
-    if (logs->status == 1) {
-        printf ("Status: FINISHED\n");
-    }
-    if (logs->status == 0) {
-        printf ("Status: IN PROGRESS\n");
-    }
+    // printf ("ID: %d\n", logs->ID);
+    // printf ("Subject: %s\n", logs->subject);
+    // printf ("Topic: %s\n", logs->topic);
+    // printf ("Start Date: %s\n", logs->start_date);
+    // printf ("End Date: %s\n", logs->end_date);
+
+    // if (logs->status == 1) {
+    //     printf ("Status: FINISHED\n");
+    // }
+    // if (logs->status == 0) {
+    //     printf ("Status: IN PROGRESS\n");
+    // }
 
     // Get the last ID entry
     // TODO: Usar search function para encontrar ID com subject ""
     // TODO: Ao Salvar no csv lembrar de adicionar o last_ID numa linha com as outras colunas vazias
 
     // Exibir Menu
+    //
     // 1. Add new
+    // Number of elements of array
+
     // 2. Edit log
     //  - modificar
     //  - remover >> Usar status 2 na array
@@ -106,25 +101,26 @@ int file_exists (const char *file_name) {
     }
 }
 
-// Find the size of file
-// source:https://www.geeksforgeeks.org/c/c-program-find-size-file/
-long int find_size (const char *file_name) {
-
+// Number of rows in the file
+int count_rows (const char *file_name) {
     FILE *file = fopen (file_name, "r");
     if (file == NULL) {
         printf ("Error: File Not Found!\n");
-        fclose (file);
         return -1;
     }
 
-    fseek (file, 0L, SEEK_END);
+    int rows = 0;
+    char ch;
 
-    // calculating the size of the file
-    long int size = ftell (file);
+    // Reads character by character until the end of the file
+    while ((ch = fgetc (file)) != EOF) {
+        if (ch == '\n') {
+            rows++;
+        }
+    }
 
     fclose (file);
-
-    return size;
+    return rows;
 }
 
 // Parsing the CSV log file
@@ -186,4 +182,5 @@ int csv_parser (study_log *logs_arr, const char *file_name) {
             column++;
         }
     }
+    return 0;
 }

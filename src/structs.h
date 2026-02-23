@@ -1,0 +1,23 @@
+// Define the program's structs and constants
+
+#ifndef STRUCTS_H
+#define STRUCTS_H
+
+#define ENTRY_LENGTH 128
+#define DATE_LENGTH 20
+#define FREE_SPACE 100 // Empty space on logs_arr tail
+
+typedef enum { IN_PROGRESS, FINISHED, REMOVED } study_status;
+
+// Study record structure
+typedef struct {
+    int ID;
+    char subject[ENTRY_LENGTH];
+    char topic[ENTRY_LENGTH];
+    char start_date[DATE_LENGTH];
+    char end_date[DATE_LENGTH];
+    study_status status;
+} study_log;
+
+
+#endif
