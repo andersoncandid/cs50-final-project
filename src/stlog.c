@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 
 #include "functionality.h"
-#include "structs.h"
+#include "definitions.h"
 
 // Last ID entry
 int last_ID;
@@ -47,9 +47,10 @@ int main () {
     // Load data into logs_arr_arr
     csv_parser (logs_arr, file_name);
 
+    // Number of elements in the array
     int arr_size = (rows + free_space);
 
-    // add_new (logs_arr, &arr_size, &free_space);
+    add_new (logs_arr, &arr_size, &free_space);
 
     // Tests
     // printf ("ID: %d\n", logs->ID);
@@ -151,7 +152,7 @@ int csv_parser (study_log *logs_arr, const char *file_name) {
 
         while (value) {
             if (column == 0) {
-                logs_arr->ID = atoi (value);
+                strcpy (logs_arr->ID, value);
             }
 
             if (column == 1) {

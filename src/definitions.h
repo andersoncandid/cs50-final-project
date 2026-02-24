@@ -8,16 +8,16 @@
 #define FREE_SPACE 100 // Empty space on logs_arr tail
 
 typedef enum { IN_PROGRESS, FINISHED, REMOVED } study_status;
+typedef int (*comp_func) (const void *a, const void *b);
 
 // Study record structure
 typedef struct {
-    int ID;
+    char ID[DATE_LENGTH];
     char subject[ENTRY_LENGTH];
     char topic[ENTRY_LENGTH];
-    char start_date[DATE_LENGTH];
+    char start_date[DATE_LENGTH]; // AAAA-MM-DD
     char end_date[DATE_LENGTH];
     study_status status;
 } study_log;
-
 
 #endif
