@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "definitions.h"
@@ -70,30 +71,54 @@ int end_cmp (const void *a, const void *b) {
 comp_func ptr_arr[5] = {&id_cmp, &subj_cmp, &top_cmp, &start_cmp, &end_cmp};
 
 // Sorting logs_arr
-char arr_sort (study_log *logs_arr, int *arr_size, char *sort_field) {
-// De acordo com o sort_field usar uma comp_func apropriada
-    //https://www.geeksforgeeks.org/c/array-of-pointers-in-c/
+// NOTE: *sort_field com menu numerico: 1-ID,2-subj,3-top,4-star,5-end
+// Se optar pelo input de termo, usar um switch para termo == log_key(numerico)
+void arr_sort (study_log *logs_arr, int *arr_size, char *log_key) {
 
-    // Sorting array
+    // Sorting according to the appropriate field
+    switch (*log_key) {
+        case '1':
+            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[0]);
+            break;
+        case '2':
+            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[1]);
+            break;
+        case '3':
+            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[2]);
+            break;
+        case '4':
+            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[3]);
+            break;
+        case '5':
+            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[4]);
+            break;
+        default:
+          break;
+    }
 }
 
 // TODO: Buscando na logs array > search function
+// NOTE: Quando fizer busca, o campo de busca e o termo buscado devem estar em lower case
+// #include <ctype.h>
+// for(int i = 0; buffer[i]; i++){
+//   buffer[i] = tolower(buffer[i]);
+// }
 
 // Add new entry
 int add_new (study_log *logs_arr, int *arr_size, int *free_space) {
-    char buffer[ENTRY_LENGTH];
+    // char buffer[ENTRY_LENGTH];
+    char ID_key = '1'; //ID
 
-    // Find the first empty index at the end of the array
-    int tail_index = (*arr_size) - (*free_space);
+    arr_sort(logs_arr,arr_size, &ID_key);
+    char *last_ID = logs_arr[*arr_size - 1].ID;
 
-    // TODO: Usar o search para encontrar o ultimo ID para adicionar o próximo
-
+    printf("%s\n", last_ID);
     // TODO: Initialize with empty strings.
     //       strcpy (logs_arr->subject, "");
 
-    printf ("Enter the Subject:\n");
-    string_input (buffer, sizeof (buffer));
-    strcpy (logs_arr->subject, buffer);
+    // printf ("Enter the Subject:\n");
+    // string_input (buffer, sizeof (buffer));
+    // strcpy (logs_arr->subject, buffer);
 
     return 0;
 }

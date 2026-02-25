@@ -7,9 +7,6 @@
 #include "functionality.h"
 #include "definitions.h"
 
-// Last ID entry
-int last_ID;
-
 // Prototype
 int file_exists (const char *file_name);
 int count_rows (const char *file_name);
@@ -30,16 +27,21 @@ int main () {
         fclose (new_file);
     }
 
+    // Number of valid elements in the array
+    int arr_size;
+
     // Get the number of rows without the header
-    int rows = count_rows (file_name) - 1;
-    if (rows == -1) {
+    arr_size = count_rows (file_name) - 1;
+    if (arr_size < 0) {
         return 1;
     }
 
-    // Create a array of dynamic size
     int free_space = FREE_SPACE;
+    int arr_max = (arr_size + free_space);
 
-    study_log *logs_arr = malloc ((rows + free_space) * sizeof (study_log));
+    // Create a array of dynamic size
+    study_log *logs_arr = malloc ((arr_max) * sizeof (study_log));
+
     if (logs_arr == NULL) {
         return 1;
     } // TODO:Checar size e usar realloc dentro da função Add_new
@@ -47,28 +49,22 @@ int main () {
     // Load data into logs_arr_arr
     csv_parser (logs_arr, file_name);
 
-    // Number of elements in the array
-    int arr_size = (rows + free_space);
-
-    add_new (logs_arr, &arr_size, &free_space);
-
-    // Tests
-    // printf ("ID: %d\n", logs->ID);
-    // printf ("Subject: %s\n", logs->subject);
-    // printf ("Topic: %s\n", logs->topic);
-    // printf ("Start Date: %s\n", logs->start_date);
-    // printf ("End Date: %s\n", logs->end_date);
-
-    // if (logs->status == 1) {
-    //     printf ("Status: FINISHED\n");
+    // HACK: Testes
+    // char input[1024] = {""};
+    // printf("Entre 1-5 para campo de busca: ");
+    // string_input(input, sizeof(input));
+    //
+    // arr_sort(logs_arr,&arr_size, input);
+    //
+    // for (int j=0; j < arr_size; j++){
+    // printf("%s, ", logs_arr[j].ID);
+    // printf("%s\n", logs_arr[j].subject);
     // }
-    // if (logs->status == 0) {
-    //     printf ("Status: IN PROGRESS\n");
-    // }
+
 
     // Get the last ID entry
-    // TODO: Usar search function para encontrar ID com subject ""
-    // TODO: Ao Salvar no csv lembrar de adicionar o last_ID numa linha com as outras colunas vazias
+
+    add_new(logs_arr,&arr_size, &free_space);
 
     // Exibir Menu
     //
@@ -88,6 +84,9 @@ int main () {
 
     // Salvar no csv com uma opçao no menu e ao fechar perguntar se deseja salvar
     // (igual vim) criar funçao salve_csv()
+
+
+    free(logs_arr);
 }
 
 // Check if file exist
@@ -137,6 +136,7 @@ int csv_parser (study_log *logs_arr, const char *file_name) {
 
     int row = 0;
     int column = 0;
+    int i = 0;
 
     // Parsing line by line
     while (fgets (buffer, sizeof (buffer), file)) {
@@ -152,36 +152,36 @@ int csv_parser (study_log *logs_arr, const char *file_name) {
 
         while (value) {
             if (column == 0) {
-                strcpy (logs_arr->ID, value);
+                strcpy (logs_arr[i].ID, value);
             }
 
             if (column == 1) {
-                strcpy (logs_arr->subject, value);
+                strcpy (logs_arr[i].subject, value);
             }
 
             if (column == 2) {
-                strcpy (logs_arr->topic, value);
+                strcpy (logs_arr[i].topic, value);
             }
 
             if (column == 3) {
-                strcpy (logs_arr->start_date, value);
+                strcpy (logs_arr[i].start_date, value);
             }
             if (column == 4) {
-                strcpy (logs_arr->end_date, value);
+                strcpy (logs_arr[i].end_date, value);
             }
-
             if (column == 5) {
                 if (*value == 'I') {
-                    logs_arr->status = IN_PROGRESS;
+                    logs_arr[i].status = IN_PROGRESS;
                 }
                 if (*value == 'F') {
-                    logs_arr->status = FINISHED;
+                    logs_arr[i].status = FINISHED;
                 }
             }
 
             value = strtok (NULL, ",");
             column++;
         }
+        i++;
     }
     return 0;
 }
