@@ -71,28 +71,51 @@ int end_cmp (const void *a, const void *b) {
 comp_func ptr_arr[5] = {&id_cmp, &subj_cmp, &top_cmp, &start_cmp, &end_cmp};
 
 // Sorting logs_arr
-// NOTE: *sort_field com menu numerico: 1-ID,2-subj,3-top,4-star,5-end
+// NOTE: *sort_field com menu numerico: 0-ID,1-subj,2-top,3-star,4-end
 // Se optar pelo input de termo, usar um switch para termo == log_key(numerico)
-void arr_sort (study_log *logs_arr, int *arr_size, char *log_key) {
+study_log *arr_search (study_log *logs_arr, size_t *arr_size, const char *log_key, char *search_key) {
+
+    study_log key;
 
     // Sorting according to the appropriate field
     switch (*log_key) {
-        case '1':
+        case '0':
+
             qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[0]);
+            strcpy (key.ID, search_key);
+            return bsearch(&key, logs_arr, *arr_size, sizeof(study_log),ptr_arr[0]);
+
+            break;
+        case '1':
+
+            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[1]);
+            strcpy (key.subject, search_key);
+            return bsearch(&key, logs_arr, *arr_size, sizeof(study_log),ptr_arr[1]);
+
             break;
         case '2':
-            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[1]);
+
+            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[2]);
+            strcpy (key.topic, search_key);
+            return bsearch(&key, logs_arr, *arr_size, sizeof(study_log),ptr_arr[2]);
+
             break;
         case '3':
-            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[2]);
+
+            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[3]);
+            strcpy (key.start_date, search_key);
+            return bsearch(&key, logs_arr, *arr_size, sizeof(study_log),ptr_arr[3]);
+
             break;
         case '4':
-            qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[3]);
-            break;
-        case '5':
+
             qsort(logs_arr, *arr_size, sizeof(study_log), ptr_arr[4]);
+            strcpy (key.end_date, search_key);
+            return bsearch(&key, logs_arr, *arr_size, sizeof(study_log),ptr_arr[4]);
+
             break;
         default:
+            return NULL;
           break;
     }
 }
@@ -105,20 +128,20 @@ void arr_sort (study_log *logs_arr, int *arr_size, char *log_key) {
 // }
 
 // Add new entry
-int add_new (study_log *logs_arr, int *arr_size, int *free_space) {
-    // char buffer[ENTRY_LENGTH];
-    char ID_key = '1'; //ID
-
-    arr_sort(logs_arr,arr_size, &ID_key);
-    char *last_ID = logs_arr[*arr_size - 1].ID;
-
-    printf("%s\n", last_ID);
-    // TODO: Initialize with empty strings.
-    //       strcpy (logs_arr->subject, "");
-
-    // printf ("Enter the Subject:\n");
-    // string_input (buffer, sizeof (buffer));
-    // strcpy (logs_arr->subject, buffer);
-
-    return 0;
-}
+// int add_new (study_log *logs_arr, size_t *arr_size, int *free_space) {
+//     // char buffer[ENTRY_LENGTH];
+//     char ID_key = '1'; //ID
+//
+//     arr_search(logs_arr,arr_size, &ID_key);
+//     char *last_ID = logs_arr[*arr_size - 1].ID;
+//
+//     printf("%s\n", last_ID);
+//     // TODO: Initialize with empty strings.
+//     //       strcpy (logs_arr->subject, "");
+//
+//     // printf ("Enter the Subject:\n");
+//     // string_input (buffer, sizeof (buffer));
+//     // strcpy (logs_arr->subject, buffer);
+//
+//     return 0;
+// }

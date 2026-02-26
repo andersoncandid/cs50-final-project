@@ -28,16 +28,19 @@ int main () {
     }
 
     // Number of valid elements in the array
-    int arr_size;
+    int rows;
+    size_t arr_size;
 
     // Get the number of rows without the header
-    arr_size = count_rows (file_name) - 1;
-    if (arr_size < 0) {
+    rows = count_rows (file_name) - 1;
+    if (rows < 0) {
         return 1;
     }
 
-    int free_space = FREE_SPACE;
-    int arr_max = (arr_size + free_space);
+    arr_size = rows;
+
+    size_t free_space = FREE_SPACE;
+    size_t arr_max = (arr_size + free_space);
 
     // Create a array of dynamic size
     study_log *logs_arr = malloc ((arr_max) * sizeof (study_log));
@@ -50,21 +53,27 @@ int main () {
     csv_parser (logs_arr, file_name);
 
     // HACK: Testes
-    // char input[1024] = {""};
-    // printf("Entre 1-5 para campo de busca: ");
-    // string_input(input, sizeof(input));
-    //
-    // arr_sort(logs_arr,&arr_size, input);
-    //
-    // for (int j=0; j < arr_size; j++){
-    // printf("%s, ", logs_arr[j].ID);
-    // printf("%s\n", logs_arr[j].subject);
-    // }
+    char log_key[1024] = {""};
+    char search_key[1024] = {""};
 
+    printf("Entre para campo de ordenaçao: ");
+    string_input(log_key, sizeof(log_key));
 
-    // Get the last ID entry
+    printf("Entre o valor de busca: ");
+    string_input(search_key, sizeof(search_key));
 
-    add_new(logs_arr,&arr_size, &free_space);
+    study_log *item = arr_search(logs_arr, &arr_size, log_key, search_key);
+
+    if (item == NULL){
+        printf("Nada encontrado!\n");
+    }else {
+    printf("Resultado da busca: \n%s, %s, %s, %s, %s\n",
+           item->ID, item->subject, item->topic, item->start_date, item->end_date);
+    }
+
+// Get the last ID entry
+
+    // add_new(logs_arr,&arr_size, &free_space);
 
     // Exibir Menu
     //
