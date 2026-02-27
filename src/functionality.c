@@ -120,7 +120,7 @@ int search_arr (study_log *buffer_arr, study_log *logs_arr, size_t arr_size,
     }
 
     // Loop until end of array or reach max of found values
-    for (int i = 0; i < (int)arr_size && n < 30; i++)
+    for (int i = 0; i < (int)arr_size && n < MAX_RESULT; i++)
     {
         const char *target_value = NULL;
 
@@ -149,7 +149,8 @@ int search_arr (study_log *buffer_arr, study_log *logs_arr, size_t arr_size,
         // Apply regex on a valid target value
         if (target_value != NULL)
         {
-            if (regexec(&reegex, target_value, 0, NULL, 0) == 0) {
+            if (regexec(&reegex, target_value, 0, NULL, 0) == 0)
+            {
                 buffer_arr[n] = logs_arr[i]; // Pattern found
                 n++;
             }
@@ -160,6 +161,7 @@ int search_arr (study_log *buffer_arr, study_log *logs_arr, size_t arr_size,
 
     sort_arr (buffer_arr, n, "0");
     return n;
+    // TODO: n == 0, Nothing found. Colocar nas opçcoes de busca
 }
 
 // Add new entry
