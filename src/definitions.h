@@ -6,6 +6,7 @@
 #define ENTRY_LENGTH 128
 #define DATE_LENGTH 20
 #define FREE_SPACE 100 // Empty space on logs_arr tail
+#define MAX_RESULT 30 // Max results found on searches
 
 typedef enum { IN_PROGRESS, FINISHED, REMOVED } study_status;
 typedef enum {

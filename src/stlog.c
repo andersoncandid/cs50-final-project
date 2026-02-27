@@ -12,12 +12,14 @@ int file_exists (const char *file_name);
 int count_rows (const char *file_name);
 int csv_parser (study_log *logs_arr, const char *file_name);
 
-int main () {
+int main ()
+{
 
     char *file_name = "userdata/study.csv";
 
     // Create a new csv file if it doesn't exist.
-    if (file_exists (file_name) == 0) {
+    if (file_exists (file_name) == 0)
+    {
         FILE *new_file = fopen (file_name, "w");
         if (new_file == NULL) {
             printf ("Error: The study.csv file could not be opened.\n");
@@ -33,7 +35,8 @@ int main () {
 
     // Get the number of rows without the header
     rows = count_rows (file_name) - 1;
-    if (rows < 0) {
+    if (rows < 0)
+    {
         return 1;
     }
 
@@ -45,35 +48,46 @@ int main () {
     // Create a array of dynamic size
     study_log *logs_arr = malloc ((arr_max) * sizeof (study_log));
 
-    if (logs_arr == NULL) {
+    if (logs_arr == NULL)
+    {
         return 1;
     } // TODO:Checar size e usar realloc dentro da função Add_new
 
     // Load data into logs_arr_arr
     csv_parser (logs_arr, file_name);
 
+    // Get the last ID entry
+    sort_arr(logs_arr, arr_size, "0");
+    char *last_ID = logs_arr[arr_size - 1].ID;
+
+/* -------------------------------------------------------------------------------- */
     // HACK: Testes
-    char log_key[1024] = {""};
-    char search_key[1024] = {""};
 
-    printf("Entre para campo de ordenaçao: ");
-    string_input(log_key, sizeof(log_key));
+    // char log_key[1024];
+    // char search_key[1024];
+    // study_log buffer_arr[MAX_RESULT];
+    //
+    // printf("Entre para campo de ordenaçao: ");
+    // string_input(log_key, sizeof(log_key));
+    //
+    // printf("Entre o valor de busca: ");
+    // string_input(search_key, sizeof(search_key));
+    //
+    // int found = arr_search (buffer_arr, logs_arr, arr_size, log_key, search_key);
+    //
+    // printf("Resultado da busca: \n");
+    // int x = 0;
+    // while (found != 0){
+    // printf("%s, %s, %s, %s, %s\n",
+    //        buffer_arr[x].ID, buffer_arr[x].subject, buffer_arr[x].topic,
+    //        buffer_arr[x].start_date, buffer_arr[x].end_date);
+    //
+    //     x++;
+    //     found--;
+    // }
 
-    printf("Entre o valor de busca: ");
-    string_input(search_key, sizeof(search_key));
+/* -------------------------------------------------------------------------------- */
 
-    study_log *item = arr_search(logs_arr, &arr_size, log_key, search_key);
-
-    if (item == NULL){
-        printf("Nada encontrado!\n");
-    }else {
-    printf("Resultado da busca: \n%s, %s, %s, %s, %s\n",
-           item->ID, item->subject, item->topic, item->start_date, item->end_date);
-    }
-
-// Get the last ID entry
-
-    // add_new(logs_arr,&arr_size, &free_space);
 
     // Exibir Menu
     //

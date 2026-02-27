@@ -13,7 +13,9 @@ int subj_cmp (const void *a, const void *b);
 int top_cmp (const void *a, const void *b);
 int start_cmp (const void *a, const void *b);
 int end_cmp (const void *a, const void *b);
-study_log *arr_search (study_log *logs_arr, size_t *arr_size, const char *log_key, char *search_key);
+void sort_arr (study_log *logs_arr, size_t arr_size, const char *log_key);
+int search_arr (study_log *buffer_arr, study_log *logs_arr, size_t arr_size,
+               const char *log_key, char *search_key);
 int add_new (study_log *logs_arr, size_t *arr_size, size_t *free_space);
 
 #endif
