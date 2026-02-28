@@ -61,6 +61,30 @@ int main ()
     char *last_ID = logs_arr[arr_size - 1].ID;
 
 /* -------------------------------------------------------------------------------- */
+
+    // User Menu
+
+    // 1. Add new
+    // add_new(&logs_arr, &arr_size, &free_space, last_ID );
+
+    // 2. Edit log
+    //  - modificar
+    //  - remover >> Usar status 2 na array
+
+    //  3. Find by Struct Key
+
+    //  4. Show Unfinished
+
+    //  5. Show by month
+    //  6. Save Changes >> nao adicionar ao arquivo status == 2 [REMOVED]
+    //  8. Exit >> Perguntar se deseja salvar
+    //  Nota:  No Readme instruçao de onde e como gerenciar o arquivo salvo
+    //  log.csv
+
+    // Salvar no csv com uma opçao no menu e ao fechar perguntar se deseja salvar
+    // (igual vim) criar funçao salve_csv()
+
+/* -------------------------------------------------------------------------------- */
     // HACK: Testes
 
     // char log_key[1024];
@@ -73,7 +97,7 @@ int main ()
     // printf("Entre o valor de busca: ");
     // string_input(search_key, sizeof(search_key));
     //
-    // int found = arr_search (buffer_arr, logs_arr, arr_size, log_key, search_key);
+    // int found = search_arr (buffer_arr, logs_arr, arr_size, log_key, search_key);
     //
     // printf("Resultado da busca: \n");
     // int x = 0;
@@ -85,29 +109,9 @@ int main ()
     //     x++;
     //     found--;
     // }
-
-/* -------------------------------------------------------------------------------- */
-
-
-    // Exibir Menu
     //
-    // 1. Add new
-    // Number of elements of array
-
-    // 2. Edit log
-    //  - modificar
-    //  - remover >> Usar status 2 na array
-    //  3. Find by Struct Key
-    //  4. Show Unfinished
-    //  5. Show by month
-    //  6. Save Changes >> nao adicionar ao arquivo status == 2 [REMOVED]
-    //  8. Exit >> Perguntar se deseja salvar
-    //  Nota:  No Readme instruçao de onde e como gerenciar o arquivo salvo
-    //  log.csv
-
-    // Salvar no csv com uma opçao no menu e ao fechar perguntar se deseja salvar
-    // (igual vim) criar funçao salve_csv()
-
+    // printf("Last ID: %s\n", last_ID);
+/* -------------------------------------------------------------------------------- */
 
     free(logs_arr);
 }
@@ -174,31 +178,32 @@ int csv_parser (study_log *logs_arr, const char *file_name) {
         char *value = strtok (buffer, ",");
 
         while (value) {
-            if (column == 0) {
+            if (column == 0)
+            {
                 strcpy (logs_arr[i].ID, value);
             }
 
-            if (column == 1) {
+            if (column == 1)
+            {
                 strcpy (logs_arr[i].subject, value);
             }
 
-            if (column == 2) {
+            if (column == 2)
+            {
                 strcpy (logs_arr[i].topic, value);
             }
 
-            if (column == 3) {
+            if (column == 3)
+            {
                 strcpy (logs_arr[i].start_date, value);
             }
-            if (column == 4) {
+            if (column == 4)
+            {
                 strcpy (logs_arr[i].end_date, value);
             }
-            if (column == 5) {
-                if (*value == 'I') {
-                    logs_arr[i].status = IN_PROGRESS;
-                }
-                if (*value == 'F') {
-                    logs_arr[i].status = FINISHED;
-                }
+            if (column == 5)
+            {
+                strcpy (logs_arr[i].status, value);
             }
 
             value = strtok (NULL, ",");
