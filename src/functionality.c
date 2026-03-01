@@ -181,15 +181,60 @@ int search_arr (study_log *buffer_arr, study_log *logs_arr, size_t arr_size,
     return n; // n == 0, Nothing found.
 }
 
+// Validate date input format YYYY-MM-DD
+int valid_date (char *date)
+{
+    int len = strlen(date);
+
+    // Validate the size
+    if (len != 10)
+    {
+        return 1;
+    }
+
+    //  Validade hyphens
+    if (date[4] != 45 || date[7] != 45)
+    {
+        return 1;
+    }
+
+    // Check if there are only digits
+    for (int i = 0; i < len; i++)
+    {
+        if (i == 4 || i == 7)
+        {
+            continue;
+        }
+        if (isdigit(date[i]) == 0)
+        {
+            return 1;
+        }
+    }
+
+    // Month tens digit > 1 and days > 3
+    if (date[5] > 49 && date[8] > 51)
+    {
+        return 2;
+    }
+
+    // MM > 12 and DD > 31
+    if ((date[5] == 49 && date[6] > 50) || (date[8] == 51 && date[9] > 49))
+    {
+        return 2;
+    }
+
+    return 0;
+}
+
 // Add new entry
-int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space, char *last_ID)
+int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
+              char *last_ID)
 {
     char buffer[ENTRY_LENGTH];
     char confirm = 'n';
 
     do {
-        printf("|-----Add New Study Log-----|\n");
-        printf("\n");
+        printf("\n--------------- Add New Log ---------------\n");
 
         // Verify if logs_arr is full
         if (*free_space <= 0)
@@ -225,24 +270,77 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space, char *l
         strcpy ((*logs_arr)[current_index].topic, buffer);
 
         // Add new start_date
-        printf("Enter start date (AAAA/MM/DD): ");
+        printf("Enter start date [YYYY-MM-DD]: ");
         string_input (buffer, sizeof (buffer));
+        int validate_date = valid_date(buffer);
+
+        // Check if the input is in the correct format
+        while (validate_date != 0)
+        {
+            if (validate_date == 1)
+            {
+                printf("Invalid format\n"
+                       "  Use: YYYY-MM-DD (e.g., 2026-03-01)\n");
+            }
+            if (validate_date == 2)
+            {
+                printf("Invalid date values\n"
+                       "  (MM: 01-12, DD: 01-31)\n");
+            }
+
+            printf("Enter start date: ");
+            string_input (buffer, sizeof (buffer));
+            validate_date = valid_date(buffer);
+        }
+
         strcpy ((*logs_arr)[current_index].start_date, buffer);
 
         // Add new end_date
-        printf("Enter end date (AAAA/MM/DD): ");
+        printf("Enter end date [YYYY-MM-DD]: ");
         string_input (buffer, sizeof (buffer));
+        validate_date = valid_date(buffer);
+
+        // Check if the input is in the correct format
+        while (validate_date != 0)
+        {
+            if (validate_date == 1)
+            {
+                printf("Invalid format\n"
+                       "  Use: YYYY-MM-DD (e.g., 2026-03-01)\n");
+            }
+            if (validate_date == 2)
+            {
+                printf("Invalid date values\n"
+                       "  (MM: 01-12, DD: 01-31)\n");
+            }
+
+            printf("Enter end date: ");
+            string_input (buffer, sizeof (buffer));
+            validate_date = valid_date(buffer);
+        }
+
         strcpy ((*logs_arr)[current_index].end_date, buffer);
 
         // Add new status
-        printf("Enter study status: ");
+        printf("Status [0: In Progress, 1: Completed]: ");
         string_input (buffer, sizeof (buffer));
+
+        // Validate status input
+        while (strlen(buffer) > 1 || (buffer[0] != 48 && buffer[0] != 49))
+        {
+            printf("Invalid input. Enter:"
+                   " \n  [0] for In Progress\n  [1] for Completed");
+            printf("\nStatus: ");
+            string_input (buffer, sizeof (buffer));
+        }
+
         strcpy ((*logs_arr)[current_index].status, buffer);
 
         *free_space -= 1;
         *arr_size += 1;
 
-        printf("Add another entry? (y/n): ");
+        // TODO: Check entrys
+        printf("\nAdd another entry? (y/n): ");
 
         // If input is not empty
         if (string_input (buffer, sizeof (buffer)) != 2)

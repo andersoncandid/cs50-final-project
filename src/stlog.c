@@ -51,7 +51,7 @@ int main ()
     if (logs_arr == NULL)
     {
         return 1;
-    } // TODO:Checar size e usar realloc dentro da função Add_new
+    }
 
     // Load data into logs_arr_arr
     csv_parser (logs_arr, file_name);
@@ -62,7 +62,17 @@ int main ()
 
 /* -------------------------------------------------------------------------------- */
 
-    // User Menu
+    // User Menu main loop
+        // printf("\n\n=============== WELCOME TO STUDY LOG ===============\n");
+        // printf("\n\n1. Add new entry.\n");
+        // printf("2. Search logs.\n");
+        // printf("3. \n");
+        // printf("4. List the count of book" "s in the library\n");
+        // printf("5. Exit");
+        //
+        // // Enter the book details
+        // printf("\n\nEnter one of "
+        //        "the above: ");
 
     // 1. Add new
     // add_new(&logs_arr, &arr_size, &free_space, last_ID );
