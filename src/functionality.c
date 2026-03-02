@@ -9,8 +9,11 @@
 #include "definitions.h"
 
 // Safe string handling
-int string_input (char *buffer, size_t buffer_size)
+int string_input (char *buffer, const size_t buffer_size)
 {
+    // Ensuring the buffer is clear
+    buffer[0] = '\0';
+
     if (fgets (buffer, buffer_size, stdin) == NULL)
     {
         return 1; // Input error
@@ -90,7 +93,7 @@ comp_func ptr_arr[6] = {&id_cmp, &subj_cmp, &top_cmp, &start_cmp, &end_cmp, &sta
 // Sorting logs_arr
 // NOTE: *sort_field com menu numerico: 0-ID,1-subj,2-top,3-star,4-end
 // Se optar pelo input de termo, usar um switch para termo == log_key(numerico)
-void sort_arr (study_log *logs_arr, size_t arr_size, const char *log_key)
+void sort_arr (study_log *logs_arr, const size_t arr_size, const char *log_key)
 {
     // Sorting according to the appropriate field
     switch (*log_key)
@@ -118,8 +121,8 @@ void sort_arr (study_log *logs_arr, size_t arr_size, const char *log_key)
     }
 }
 
-int search_arr (study_log *buffer_arr, study_log *logs_arr, size_t arr_size,
-               const char *log_key, char *search_key)
+int search_arr (study_log *buffer_arr, study_log *logs_arr, const size_t arr_size,
+               const char *log_key, const char *search_key)
 {
     regex_t reegex;
     int n = 0;
@@ -182,7 +185,7 @@ int search_arr (study_log *buffer_arr, study_log *logs_arr, size_t arr_size,
 }
 
 // Validate date input format YYYY-MM-DD
-int valid_date (char *date)
+int valid_date (const char *date)
 {
     int len = strlen(date);
 
@@ -230,6 +233,7 @@ int valid_date (char *date)
 int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
               char *last_ID)
 {
+    study_log temp;
     char buffer[ENTRY_LENGTH];
     char confirm = 'n';
 
@@ -252,22 +256,20 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
 
         }
 
-        int current_index = *arr_size;
-
         // Add new ID
-        int int_ID = atoi(last_ID);
-        sprintf(buffer, "%d", int_ID);
-        strcpy ((*logs_arr)[current_index].ID, buffer);
+        int new_ID = (atoi(last_ID)) + 1;
+        sprintf(buffer, "%d", new_ID);
+        strcpy (temp.ID, buffer);
 
         // Add new subject
         printf("Enter subject: ");
         string_input (buffer, sizeof (buffer));
-        strcpy ((*logs_arr)[current_index].subject, buffer);
+        strcpy (temp.subject, buffer);
 
         // Add new topic
         printf("Enter topic: ");
         string_input (buffer, sizeof (buffer));
-        strcpy ((*logs_arr)[current_index].topic, buffer);
+        strcpy (temp.topic, buffer);
 
         // Add new start_date
         printf("Enter start date [YYYY-MM-DD]: ");
@@ -293,7 +295,7 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
             validate_date = valid_date(buffer);
         }
 
-        strcpy ((*logs_arr)[current_index].start_date, buffer);
+        strcpy (temp.start_date, buffer);
 
         // Add new end_date
         printf("Enter end date [YYYY-MM-DD]: ");
@@ -319,7 +321,7 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
             validate_date = valid_date(buffer);
         }
 
-        strcpy ((*logs_arr)[current_index].end_date, buffer);
+        strcpy (temp.end_date, buffer);
 
         // Add new status
         printf("Status [0: In Progress, 1: Completed]: ");
@@ -334,16 +336,57 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
             string_input (buffer, sizeof (buffer));
         }
 
-        strcpy ((*logs_arr)[current_index].status, buffer);
+        if (buffer[0] == '0')
+        {
+            strcpy (temp.status, "In Progress");
+        }
+        if (buffer[0] == '1')
+        {
+            strcpy (temp.status, "Completed");
+        }
 
-        *free_space -= 1;
-        *arr_size += 1;
+        // Confirming the entry before updating logs_arr
+        printf(BLUE "\n%-5s   %-15s   %-15s   %-10s   %-10s   %s\n" RESET,
+               "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
+        printf("%-5s   %-15s   %-15s   %-10s   %-10s   %s\n",
+               temp.ID, temp.subject, temp.topic, temp.start_date,
+               temp.end_date, temp.status);
 
-        // TODO: Check entrys
-        printf("\nAdd another entry? (y/n): ");
+        printf("\nConfirm entry? (y/n): ");
+        string_input (buffer, sizeof (buffer));
 
-        // If input is not empty
-        if (string_input (buffer, sizeof (buffer)) != 2)
+            // Validating the confirmation
+            if (strlen(buffer) == 1 && tolower(buffer[0]) == 'y')
+            {
+                strcpy(last_ID, temp.ID); // Update last_ID
+
+                strcpy ((*logs_arr)[*arr_size].ID, temp.ID);
+                strcpy ((*logs_arr)[*arr_size].subject, temp.subject);
+                strcpy ((*logs_arr)[*arr_size].topic, temp.topic);
+                strcpy ((*logs_arr)[*arr_size].start_date, temp.start_date);
+                strcpy ((*logs_arr)[*arr_size].end_date, temp.end_date);
+                strcpy ((*logs_arr)[*arr_size].status, temp.status);
+
+                *free_space -= 1;
+                *arr_size += 1;
+            }
+            else
+            {
+                printf("--> Entry not saved!\n");
+            }
+
+        // Assign empty string to temp variable
+        temp.ID[0] = '\0';
+        temp.subject[0] = '\0';
+        temp.topic[0] = '\0';
+        temp.start_date[0] = '\0';
+        temp.end_date[0] = '\0';
+        temp.status[0] = '\0';
+
+        printf("Add another entry? (y/n): ");
+        string_input (buffer, sizeof (buffer));
+
+        if (strlen(buffer) == 1 && tolower(buffer[0]) == 'y')
         {
             confirm = tolower(buffer[0]);
         }
@@ -352,3 +395,76 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
 
     return 0;
 }
+
+// FIX: Dividir em 2 funçoes, 1 para deletar e outra para alterar o status
+
+// int edit_log (study_log *logs_arr, const size_t arr_size,
+//               const char *target_ID, const char *edit_option)
+// {
+//     study_log temp;
+//     char buffer[ENTRY_LENGTH];
+//     int edit_index;
+//
+//     for (int i = 0; i < arr_size; i++)
+//     {
+//         if (strcmp(logs_arr[i].ID, target_ID) == 0)
+//         {
+//             edit_index = i;
+//
+//             strcpy(logs_arr[i].ID, temp.ID);
+//             strcpy(logs_arr[i].subject, temp.subject);
+//             strcpy(logs_arr[i].topic, temp.topic);
+//             strcpy(logs_arr[i].start_date, temp.start_date);
+//             strcpy(logs_arr[i].end_date, temp.end_date);
+//             strcpy(logs_arr[i].status, temp.status);
+//
+//             break;
+//         }
+//     }
+//
+//     printf("--------------- Log Info ---------------\n");
+//     printf("%-15s | %-15s | %-15s | %-15s | %-15s | %s\n",
+//            "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
+//     printf("%-15s | %-15s | %-15s | %-15s | %-15s | %s\n",
+//            temp.ID, temp.subject, temp.topic, temp.start_date,
+//            temp.end_date, temp.status);
+//
+//     switch (edit_option[0])
+//     {
+//         case '1':
+//
+//         case '2':
+//             printf("Confirm: Delete entry #%d? (y/n): ", temp.ID);
+//             string_input (buffer, sizeof (buffer));
+//             if (tolower(buffer[0]) == 'y')
+//             {
+//                 strcpy(temp.ID, "");
+//                 strcpy(temp.subject, "");
+//                 strcpy(temp.topic, "");
+//                 strcpy(temp.start_date, "");
+//                 strcpy(temp.end_date, "");
+//                 strcpy(temp.status, "2"); // [status=2] to remove
+//             }
+//         break;
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,6 +8,13 @@
 #define FREE_SPACE 100 // Empty space on end of logs_arr
 #define MAX_RESULT 50 // Max results found on searches
 
+// Defining the output colors
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define RESET   "\033[0m"
+
 typedef enum {
     ID,
     subject,

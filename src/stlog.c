@@ -57,8 +57,10 @@ int main ()
     csv_parser (logs_arr, file_name);
 
     // Get the last ID entry
+    char last_ID[50];
     sort_arr(logs_arr, arr_size, "0");
-    char *last_ID = logs_arr[arr_size - 1].ID;
+
+    strcpy(last_ID, logs_arr[arr_size - 1].ID);
 
 /* -------------------------------------------------------------------------------- */
 
@@ -75,11 +77,11 @@ int main ()
         //        "the above: ");
 
     // 1. Add new
-    // add_new(&logs_arr, &arr_size, &free_space, last_ID );
+    add_new(&logs_arr, &arr_size, &free_space, last_ID );
 
-    // 2. Edit log
-    //  - modificar
-    //  - remover >> Usar status 2 na array
+    // TODO: Validar a entrada, para ter certeza se é ID
+    // 2. Edit log status by ID
+    // 3. Delete log by ID    remover >> Usar status 2 na array
 
     //  3. Find by Struct Key
 
@@ -88,6 +90,8 @@ int main ()
     //  5. Show by month
     //  6. Save Changes >> nao adicionar ao arquivo status == 2 [REMOVED]
     //  8. Exit >> Perguntar se deseja salvar
+    //  TODO: Ao salvar pular status == 2
+
     //  Nota:  No Readme instruçao de onde e como gerenciar o arquivo salvo
     //  log.csv
 
