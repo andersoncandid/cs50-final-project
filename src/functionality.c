@@ -51,6 +51,7 @@ int id_cmp (const void *a, const void *b)
 
     return strcmp (aa->ID, bb->ID);
 }
+
 int subj_cmp (const void *a, const void *b)
 {
     const study_log *aa = (const study_log *)a;
@@ -58,6 +59,7 @@ int subj_cmp (const void *a, const void *b)
 
     return strcmp (aa->subject, bb->subject);
 }
+
 int top_cmp (const void *a, const void *b)
 {
     const study_log *aa = (const study_log *)a;
@@ -65,6 +67,7 @@ int top_cmp (const void *a, const void *b)
 
     return strcmp (aa->topic, bb->topic);
 }
+
 int start_cmp (const void *a, const void *b)
 {
     const study_log *aa = (const study_log *)a;
@@ -72,6 +75,7 @@ int start_cmp (const void *a, const void *b)
 
     return strcmp (aa->start_date, bb->start_date);
 }
+
 int end_cmp (const void *a, const void *b)
 {
     const study_log *aa = (const study_log *)a;
@@ -79,6 +83,7 @@ int end_cmp (const void *a, const void *b)
 
     return strcmp (aa->end_date, bb->end_date);
 }
+
 int status_cmp (const void *a, const void *b)
 {
     const study_log *aa = (const study_log *)a;
@@ -372,7 +377,7 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
             }
             else
             {
-                printf("--> Entry not saved!\n");
+                printf("  Entry not saved!\n");
             }
 
         // Assign empty string to temp variable
@@ -396,58 +401,148 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
     return 0;
 }
 
-// FIX: Dividir em 2 funçoes, 1 para deletar e outra para alterar o status
+// Find target ID for edit function
+int search_ID (const study_log *logs_arr, const size_t arr_size,
+               const char *target_ID)
+{
+    for (int i = 0; i < (int)arr_size; i++)
+    {
+        if (strcmp(logs_arr[i].ID, target_ID) == 0)
+        {
+            return i;
+        }
 
-// int edit_log (study_log *logs_arr, const size_t arr_size,
-//               const char *target_ID, const char *edit_option)
-// {
-//     study_log temp;
-//     char buffer[ENTRY_LENGTH];
-//     int edit_index;
-//
-//     for (int i = 0; i < arr_size; i++)
-//     {
-//         if (strcmp(logs_arr[i].ID, target_ID) == 0)
-//         {
-//             edit_index = i;
-//
-//             strcpy(logs_arr[i].ID, temp.ID);
-//             strcpy(logs_arr[i].subject, temp.subject);
-//             strcpy(logs_arr[i].topic, temp.topic);
-//             strcpy(logs_arr[i].start_date, temp.start_date);
-//             strcpy(logs_arr[i].end_date, temp.end_date);
-//             strcpy(logs_arr[i].status, temp.status);
-//
-//             break;
-//         }
-//     }
-//
-//     printf("--------------- Log Info ---------------\n");
-//     printf("%-15s | %-15s | %-15s | %-15s | %-15s | %s\n",
-//            "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
-//     printf("%-15s | %-15s | %-15s | %-15s | %-15s | %s\n",
-//            temp.ID, temp.subject, temp.topic, temp.start_date,
-//            temp.end_date, temp.status);
-//
-//     switch (edit_option[0])
-//     {
-//         case '1':
-//
-//         case '2':
-//             printf("Confirm: Delete entry #%d? (y/n): ", temp.ID);
-//             string_input (buffer, sizeof (buffer));
-//             if (tolower(buffer[0]) == 'y')
-//             {
-//                 strcpy(temp.ID, "");
-//                 strcpy(temp.subject, "");
-//                 strcpy(temp.topic, "");
-//                 strcpy(temp.start_date, "");
-//                 strcpy(temp.end_date, "");
-//                 strcpy(temp.status, "2"); // [status=2] to remove
-//             }
-//         break;
-//     }
-// }
+    }
+
+    printf("ID %s not found\n", target_ID);
+    return -1;
+}
+
+// Edit end date, status or delete log
+int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index)
+{
+    study_log temp;
+    char buffer[ENTRY_LENGTH];
+    int validate_date;
+
+    // Copy taget log to temp struct
+    strcpy(temp.ID, logs_arr[target_index].ID);
+    strcpy(temp.subject, logs_arr[target_index].subject);
+    strcpy(temp.topic, logs_arr[target_index].topic);
+    strcpy(temp.start_date, logs_arr[target_index].start_date);
+    strcpy(temp.end_date, logs_arr[target_index].end_date);
+    strcpy(temp.status, logs_arr[target_index].status);
+
+    // Display target log
+    printf("\n------------------------------------------- Log Info ------------"
+           "-------------------------------\n");
+    printf("%-15s | %-15s | %-15s | %-15s | %-15s | %s\n",
+           "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
+    printf("%-15s | %-15s | %-15s | %-15s | %-15s | %s\n",
+           temp.ID, temp.subject, temp.topic, temp.start_date,
+           temp.end_date, temp.status);
+
+    // Get edit options
+    printf("1. Edit end date\n2. Edit Status\n3. Delete Log\n");
+    printf("\nSelect an option [1-3]: ");
+    string_input (buffer, sizeof (buffer));
+
+    // Validate input
+    if (strlen(buffer) > 1 || (buffer[0] < 49 || buffer[0] > 51))
+    {
+        printf("Invalid option\n");
+        return 1;
+    }
+
+    switch (buffer[0])
+    {
+        case '1':
+            printf("\nEnter new end date [YYYY-MM-DD]: ");
+            string_input (buffer, sizeof (buffer));
+            validate_date = valid_date(buffer);
+
+            // Check if the input is in the correct format
+            while (validate_date != 0)
+            {
+                if (validate_date == 1)
+                {
+                    printf("Invalid format\n"
+                           "  Use: YYYY-MM-DD (e.g., 2026-03-01)\n");
+                }
+                if (validate_date == 2)
+                {
+                    printf("Invalid date values\n"
+                           "  (MM: 01-12, DD: 01-31)\n");
+                }
+
+                printf("Enter new end date: ");
+                string_input (buffer, sizeof (buffer));
+                validate_date = valid_date(buffer);
+            }
+
+            strcpy (temp.end_date, buffer);
+        break;
+
+        case '2':
+            printf("\nEnter new status: ");
+            string_input (buffer, sizeof (buffer));
+
+            // Validate status input
+            while (strlen(buffer) > 1 || (buffer[0] != 48 && buffer[0] != 49))
+            {
+                printf("Invalid input. Enter:"
+                       " \n  [0] for In Progress\n  [1] for Completed");
+                printf("\nEnter new status: ");
+                string_input (buffer, sizeof (buffer));
+            }
+
+            if (buffer[0] == '0')
+            {
+                strcpy (temp.status, "In Progress");
+            }
+            if (buffer[0] == '1')
+            {
+                strcpy (temp.status, "Completed");
+            }
+        break;
+
+        case '3':
+            printf("\nConfirm: Delete Log? (y/n): ");
+            string_input (buffer, sizeof (buffer));
+
+            if (tolower(buffer[0]) == 'y')
+            {
+                // Clean struct items
+                strcpy(temp.ID, "");
+                strcpy(temp.subject, "");
+                strcpy(temp.topic, "");
+                strcpy(temp.start_date, "");
+                strcpy(temp.end_date, "");
+                strcpy(temp.status, "2"); // [status=2] to remove
+                
+                printf("  Log deleted!\n");
+            }
+            else
+            {
+                printf("  Log not deleted!\n");
+            }
+
+        break;
+
+        default:
+            break;
+    }
+
+    // Update logs array
+    strcpy(logs_arr[target_index].ID, temp.ID);
+    strcpy(logs_arr[target_index].subject, temp.subject);
+    strcpy(logs_arr[target_index].topic, temp.topic);
+    strcpy(logs_arr[target_index].start_date, temp.start_date);
+    strcpy(logs_arr[target_index].end_date, temp.end_date);
+    strcpy(logs_arr[target_index].status, temp.status);
+
+    return 0;
+}
 
 
 

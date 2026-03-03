@@ -77,11 +77,30 @@ int main ()
         //        "the above: ");
 
     // 1. Add new
-    add_new(&logs_arr, &arr_size, &free_space, last_ID );
+        // add_new(&logs_arr, &arr_size, &free_space, last_ID );
 
-    // TODO: Validar a entrada, para ter certeza se é ID
     // 2. Edit log status by ID
-    // 3. Delete log by ID    remover >> Usar status 2 na array
+        char target_id[DATE_LENGTH];
+        int target_index;
+
+        printf("Enter log ID: ");
+        string_input (target_id, sizeof (target_id));
+        target_index = search_ID(logs_arr,arr_size, target_id);
+
+        // Check if the ID was not found
+        if (target_index == - 1)
+        {
+            return 1; // TODO: Valtar para o menu
+        }
+
+        // Enter edit functionality
+        if (edit_log(logs_arr, arr_size, target_index) == 1)
+        {
+            return 1; // TODO: Valtar para o menu
+        }
+
+        printf("%s\n", logs_arr[target_index].end_date);
+        printf("%s\n", logs_arr[target_index].status);
 
     //  3. Find by Struct Key
 
