@@ -8,6 +8,43 @@
 
 #include "definitions.h"
 
+// Trimming white spaces from a string
+void trim_string(char *str)
+{
+    // Error check
+    if (str == NULL)
+    {
+        return;
+    }
+
+    int len = strlen(str);
+    if (len == 0)
+    {
+        return; // Empty string
+    }
+
+    int start = 0, end = len - 1;
+
+    // Remove leading whitespace
+    while (isspace((unsigned char)str[start]))
+    {
+        start++;
+    }
+
+    // Remove trailing whitespace
+    while (end > start && isspace((unsigned char)str[end]))
+    {
+        end--;
+    }
+
+    // Move the string and place null terminator
+    if (start > 0 || end < (len - 1))
+    {
+        memmove(str, str + start, end - start + 1);
+        str[end - start + 1] = '\0';
+    }
+}
+
 // Safe string handling
 int string_input (char *buffer, const size_t buffer_size)
 {
@@ -22,7 +59,6 @@ int string_input (char *buffer, const size_t buffer_size)
     // Check if the input exceeds the size
     if (strchr (buffer, '\n') != NULL)
     {
-
         // If the \n was found, the input fit in the buffer
         // Remove trailing newline
         buffer[strcspn (buffer, "\n")] = '\0';
@@ -39,6 +75,9 @@ int string_input (char *buffer, const size_t buffer_size)
     {
         return 2;
     }
+
+    // Trim input
+    trim_string(buffer);
 
     return 0;
 }
@@ -95,13 +134,11 @@ int status_cmp (const void *a, const void *b)
 // Creating an array of helper function pointers
 comp_func ptr_arr[6] = {&id_cmp, &subj_cmp, &top_cmp, &start_cmp, &end_cmp, &status_cmp};
 
-// Sorting logs_arr
-// NOTE: *sort_field com menu numerico: 0-ID,1-subj,2-top,3-star,4-end
-// Se optar pelo input de termo, usar um switch para termo == log_key(numerico)
-void sort_arr (study_log *logs_arr, const size_t arr_size, const char *log_key)
+// Sorting logs_arr by value
+void sort_arr (study_log *logs_arr, const size_t arr_size, const char *search_value)
 {
     // Sorting according to the appropriate field
-    switch (*log_key)
+    switch (*search_value)
     {
         case '0':
             qsort(logs_arr, arr_size, sizeof(study_log), ptr_arr[0]);
@@ -126,29 +163,36 @@ void sort_arr (study_log *logs_arr, const size_t arr_size, const char *log_key)
     }
 }
 
-int search_arr (study_log *buffer_arr, study_log *logs_arr, const size_t arr_size,
-               const char *log_key, const char *search_key)
+// Search in logs_arr per member and value
+int search_arr (study_log *results_arr, study_log *logs_arr, const size_t arr_size,
+               const char *search_member, const char *search_value)
 {
     regex_t reegex;
     int n = 0;
     int last_index = (int)arr_size - 1;
 
     // Compiling Regex
-    if (regcomp(&reegex, search_key, REG_ICASE) != 0)
+    if (regcomp(&reegex, search_value, REG_EXTENDED | REG_ICASE) != 0)
     {
-        return 0; // Compilation error
+        return 1; // Compilation error
     }
 
-    // Retrieves the latest entries as search results
+    // Sort by ID for retrieves the latest entries as search results
     sort_arr (logs_arr, n, "0");
 
     // Loop until end of array or reach max of found values
-    for (int i = 0; i < (int)arr_size && n < MAX_RESULT; i++)
+    for (int i = 0; i < (int)arr_size && n < MAX_RESULTS; i++)
     {
         const char *target_value = NULL;
 
-        // Get the value from logs_arr that corresponds to the log_key
-        switch (*log_key)
+        // Skipping status marked for removal
+        if (strcmp(logs_arr[last_index - i].status, "delete") == 0)
+        {
+            continue;
+        }
+
+        // Get the value from logs_arr that corresponds to the search_value
+        switch (*search_member)
         {
             case '0':
                 target_value = logs_arr[last_index - i].ID;
@@ -177,7 +221,7 @@ int search_arr (study_log *buffer_arr, study_log *logs_arr, const size_t arr_siz
         {
             if (regexec(&reegex, target_value, 0, NULL, 0) == 0)
             {
-                buffer_arr[n] = logs_arr[last_index - i]; // Pattern found
+                results_arr[n] = logs_arr[last_index - i]; // Pattern found
                 n++;
             }
         }
@@ -185,8 +229,8 @@ int search_arr (study_log *buffer_arr, study_log *logs_arr, const size_t arr_siz
 
     regfree(&reegex);
 
-    sort_arr (buffer_arr, n, "0");
-    return n; // n == 0, Nothing found.
+    sort_arr (results_arr, n, "0");
+    return n; // n == 0, Nothing found
 }
 
 // Validate date input format YYYY-MM-DD
@@ -351,9 +395,9 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
         }
 
         // Confirming the entry before updating logs_arr
-        printf(BLUE "\n%-5s   %-15s   %-15s   %-10s   %-10s   %s\n" RESET,
+        printf(BLUE "\n%-5s   %-15s   %-35s   %-10s   %-10s   %s\n" RESET,
                "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
-        printf("%-5s   %-15s   %-15s   %-10s   %-10s   %s\n",
+        printf("%-5s | %-15s | %-35s | %-10s | %-10s | %s\n",
                temp.ID, temp.subject, temp.topic, temp.start_date,
                temp.end_date, temp.status);
 
@@ -436,9 +480,9 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
     // Display target log
     printf("\n------------------------------------------- Log Info ------------"
            "-------------------------------\n");
-    printf("%-15s | %-15s | %-15s | %-15s | %-15s | %s\n",
+    printf(BLUE "\n%-5s   %-15s   %-35s   %-10s   %-10s   %s\n" RESET,
            "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
-    printf("%-15s | %-15s | %-15s | %-15s | %-15s | %s\n",
+    printf("%-5s | %-15s | %-35s | %-10s | %-10s | %s\n",
            temp.ID, temp.subject, temp.topic, temp.start_date,
            temp.end_date, temp.status);
 
@@ -512,14 +556,9 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
 
             if (tolower(buffer[0]) == 'y')
             {
-                // Clean struct items
-                strcpy(temp.ID, "");
-                strcpy(temp.subject, "");
-                strcpy(temp.topic, "");
-                strcpy(temp.start_date, "");
-                strcpy(temp.end_date, "");
-                strcpy(temp.status, "2"); // [status=2] to remove
-                
+                // [status=2] to remove
+                strcpy(temp.status, "delete");
+
                 printf("  Log deleted!\n");
             }
             else
@@ -543,23 +582,4 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

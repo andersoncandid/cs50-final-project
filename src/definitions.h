@@ -6,7 +6,7 @@
 #define ENTRY_LENGTH 128
 #define DATE_LENGTH 20
 #define FREE_SPACE 100 // Empty space on end of logs_arr
-#define MAX_RESULT 50 // Max results found on searches
+#define MAX_RESULTS 50 // Max results found on searches
 
 // Defining the output colors
 #define RED     "\033[31m"
@@ -31,7 +31,7 @@ typedef struct {
     char topic[ENTRY_LENGTH];
     char start_date[DATE_LENGTH]; // AAAA-MM-DD
     char end_date[DATE_LENGTH];
-    char status[ENTRY_LENGTH]; // 0 = REMOVED
+    char status[ENTRY_LENGTH];
 } study_log;
 
 #endif

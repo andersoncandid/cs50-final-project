@@ -1,3 +1,0 @@
-Descrição do Projeto:
-    Um programa em linha de comando de ratreador de estudo.
-

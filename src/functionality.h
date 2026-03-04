@@ -8,9 +8,9 @@
 #include "definitions.h"
 
 int string_input (char *buffer, const size_t buffer_size);
-void sort_arr (study_log *logs_arr, const size_t arr_size, const char *log_key);
-int search_arr (study_log *buffer_arr, study_log *logs_arr, const size_t arr_size,
-               const char *log_key, const char *search_key);
+void sort_arr (study_log *logs_arr, const size_t arr_size, const char *search_value);
+int search_arr (study_log *results_arr, study_log *logs_arr, const size_t arr_size,
+               const char *search_member, const char *search_value);
 int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
              char *last_ID);
 int search_ID (const study_log *logs_arr, const size_t arr_size,
