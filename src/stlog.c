@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,7 @@ int csv_parser (study_log *logs_arr, const char *file_name);
 int execute_search (study_log *results_arr, study_log *logs_arr, const size_t arr_size,
                     const char *search_member, const char *search_value);
 int save_data (study_log *logs_arr,const size_t arr_size, const char *file_name);
+void open_csv_file (const char *file_name);
 
 int main ()
 {
@@ -61,172 +63,188 @@ int main ()
 
     // Get the last ID entry
     char last_ID[50];
-    sort_arr(logs_arr, arr_size, "0");
+    sort_arr(logs_arr, arr_size, "1");
 
     strcpy(last_ID, logs_arr[arr_size - 1].ID);
 
 
     /* --------- Program menu loop --------- */
-    // while (1)
-    // {
-        // char menu_option[DATE_LENGTH] = {0};
-        // study_log results_arr[MAX_RESULTS] = {0};
-        // char search_member[DATE_LENGTH] = {0};
-        // char search_value[ENTRY_LENGTH] = {0};
+    int loop = 1;
 
-        // User Menu
-        // printf("\n\n=============== WELCOME TO STUDY LOG ===============\n");
-        // printf("\n\n1. Add new entry.\n");
-        // printf("2. Search logs.\n");
-        // printf("3. \n");
-        // printf("4. List the count of book" "s in the library\n");
-        // printf("5. Exit");
-        //
-        // // Enter the book details
-        // printf("\n\nEnter one of "
-        //        "the above: ");
+    while (loop)
+    {
+        // Initialize search buffers and variables
+        char menu_opt[DATE_LENGTH] = {0};
+        study_log results_arr[MAX_RESULTS] = {0};
+        char search_member[DATE_LENGTH] = {0};
+        char search_value[ENTRY_LENGTH] = {0};
+        char target_id[DATE_LENGTH] = {0};
+        int target_index = 0;
+        char year_input[DATE_LENGTH] = {0};
+        char mouth_input[DATE_LENGTH] = {0};
+        char regex_format[ENTRY_LENGTH] = {0};
+        char confirm_save[DATE_LENGTH] = {0};
 
-        // FIX: 1. Add new
+        // Main Menu
+        printf("================================\n%20s\n"
+               "================================\n", "STUDY LOG");
+        printf(" 1. Add new entry\n"
+               " 2. Search study entries\n"
+               " 3. Edit a study entry by [ID]\n"
+               " 4. View 'In Progress' studies\n"
+               " 5. View studies by start month\n"
+               " 6. Save changes to CSV\n"
+               " 7. Open CSV in external program\n"
+               " 8. Save and Exit\n");
+        printf("================================\n");
+        printf("Select an option [1-8]: ");
+        string_input (menu_opt, sizeof (menu_opt));
 
-        // add_new(&logs_arr, &arr_size, &free_space, last_ID);
+        // Validate input
+        while (strlen(menu_opt) > 1 || (menu_opt[0] < 49 || menu_opt[0] > 56))
+        {
+            printf("Invalid option\nSelect an option [1-8]: ");
+            string_input (menu_opt, sizeof (menu_opt));
+        }
 
-        // 2. Edit log status by ID
-        // char target_id[DATE_LENGTH];
-        // int target_index;
-        //
-        // printf("Enter log ID: ");
-        // string_input (target_id, sizeof (target_id));
-        // target_index = search_ID(logs_arr,arr_size, target_id);
-        //
-        // // Check if the ID was not found
-        // if (target_index == - 1)
-        // {
-        //     continue;
-        // }
+        switch (menu_opt[0])
+        {
+            // New entry option
+            case '1':
+                add_new(&logs_arr, &arr_size, &free_space, last_ID);
+            break;
 
-        // FIX: 2. Find by Struct Key
+            // Search option
+            case '2':
+                printf("Search by\n"
+                       "  1. ID\n"
+                       "  2. Subject\n"
+                       "  3. Topic\n"
+                       "  4. Start date\n"
+                       "  5. End date\n"
+                       "  6. Return to Menu\n");
+                printf("Enter an option [1-6]: ");
+                string_input (search_member, sizeof (search_member));
 
-        // if (edit_log(logs_arr, arr_size, target_index) == 1)
-        // {
-        //     continue;
-        // }
+                // Validate input
+                while (strlen(search_member) > 1 ||
+                    (search_member[0] < 49 || search_member[0] > 54))
+                {
+                    printf("Invalid option\nEnter an option [1-6]: ");
+                    string_input (search_member, sizeof (search_member));
+                }
 
-        // Prompt for search member
-        // printf("Search by\n  0. ID\n  1. Subject\n  2. Topic\n  3. Start date\n"
-        //        "  4. End date\n  5. Return to Menu\n");
-        // printf("\nEnter an option [0-5]: ");
-        // string_input (search_member, sizeof (search_member));
-        //
-        // // Validate input
-        // while (strlen(search_member) > 1 ||
-        //     (search_member[0] < 48 || search_member[0] > 53))
-        // {
-        //     printf("Invalid option\nEnter an option [0-5]: ");
-        //     string_input (search_member, sizeof (search_member));
-        // }
-        //
-        // // Prompt for search value
-        // switch (search_member[0])
-        // {
-        //     case '0':
-        //         printf("Enter ID: "); break;
-        //     case '1':
-        //         printf("Enter Subject: "); break;
-        //     case '2':
-        //         printf("Enter Topic: "); break;
-        //     case '3':
-        //         printf("Enter Start date: "); break;
-        //     case '4':
-        //         printf("Enter End date: "); break;
-        //     case '5':
-        //         continue;
-        //         break;
-        //     default:
-        //         continue;
-        //         break;
-        // }
-        //
-        // string_input (search_value, sizeof (search_value));
-        //
-        // if (execute_search(results_arr, logs_arr, arr_size,
-        //                    search_member, search_value) == 0)
-        // {
-        //     continue;
-        // }
+                switch (search_member[0])
+                {
+                    case '1':
+                        printf("Enter ID: "); break;
+                    case '2':
+                        printf("Enter Subject: "); break;
+                    case '3':
+                        printf("Enter Topic: "); break;
+                    case '4':
+                        printf("Enter Start date: "); break;
+                    case '5':
+                        printf("Enter End date: "); break;
+                    case '6':
+                        continue;
+                        break;
+                    default:
+                        continue;
+                        break;
+                }
 
-        // FIX: 3. Edit log by ID
+                string_input (search_value, sizeof (search_value));
 
-        // FIX:  4. Show Unfinished
+                if (execute_search(results_arr, logs_arr, arr_size,
+                                   search_member, search_value) == 0)
+                {
+                    continue;
+                }
+            break;
 
-        // if (execute_search(results_arr, logs_arr, arr_size,
-        //                    "5", "In Progress") == 0)
-        // {
-        //     continue;
-        // }
+            // Edit by ID option
+            case '3':
+                printf("Enter entry ID: ");
+                string_input (target_id, sizeof (target_id));
+                target_index = search_ID(logs_arr,arr_size, target_id);
 
-        // FIX: 5. Show Start date by month
+                // Check if the ID was not found
+                if (target_index == - 1)
+                {
+                    continue;
+                }
+                if (edit_log(logs_arr, arr_size, target_index) == 1)
+                {
+                    continue;
+                }
+            break;
 
-        // char mouth_input[DATE_LENGTH];
-        // char regex_format[ENTRY_LENGTH];
-        //
-        // printf("Enter the month [MM]: ");
-        // string_input (mouth_input, sizeof (mouth_input));
-        //
-        //
-        // // Building a regex for filter MM in date(YYYY-MM-DD)
-        // snprintf(regex_format, sizeof(regex_format), "^[0-9]{4}-%s-[0-9]{2}$",
-        //          mouth_input);
-        //
-        // if (execute_search(results_arr, logs_arr, arr_size,
-        //                    "3", regex_format) == 0)
-        // {
-        //     continue;
-        // }
+            // View In Progress option
+            case '4':
+                if (execute_search(results_arr, logs_arr, arr_size,
+                                   "6", "In Progress") == 0)
+                {
+                    continue;
+                }
+            break;
 
-        // FIX: 6. Save Changes >> nao adicionar ao arquivo status == 2 [REMOVED]
+            // View start mouth option
+            case '5':
+                printf("Enter the year [YYYY]: ");
+                string_input (year_input, sizeof (year_input));
 
-            // save_data(logs_arr,arr_size, file_name);
-            // continue;
+                printf("Enter the month [MM]: ");
+                string_input (mouth_input, sizeof (mouth_input));
 
-        // FIX: 8. Exit >> Perguntar se deseja salvar
+                // Building a regex for filter MM in date(YYYY-MM-DD)
+                snprintf(regex_format, sizeof(regex_format), 
+                         "^%s-%s-[0-9]{2}$", year_input, mouth_input);
 
-            // save_data(logs_arr,arr_size, file_name);
+                if (execute_search(results_arr, logs_arr, arr_size,
+                                   "4", regex_format) == 0)
+                {
+                    continue;
+                }
+            break;
 
+            // Save data option
+            case '6':
+                save_data(logs_arr,arr_size, file_name);
+                continue;
+            break;
+
+            // Open CSV in external program option
+            case '7':
+                open_csv_file(file_name);
+                continue;
+            break;
+
+            // Save and exit option
+            case '8':
+                printf("\nConfirm: Save data in CSV file? (y/n): ");
+                string_input (confirm_save, sizeof (confirm_save));
+
+                if (strlen(confirm_save) == 1 && tolower(confirm_save[0]) == 'y')
+                {
+                    save_data(logs_arr,arr_size, file_name);
+                }
+                else
+                {
+                    printf("  Data not saved!\n");
+                }
+
+                loop = 0;
+            break;
+
+            default:
+                loop = 0;
+            break;
+        }
         //  Nota:  No Readme instruçao de onde e como gerenciar o arquivo salvo
         //  log.csv
 
-        // Salvar no csv com uma opçao no menu e ao fechar perguntar se deseja salvar
-        // (igual vim) criar funçao salve_csv()
-
-    // }
-/* -------------------------------------------------------------------------------- */
-    // HACK: Testes
-
-    // char log_key[1024];
-    // char search_key[1024];
-    // study_log buffer_arr[MAX_RESULTS];
-    //
-    // printf("Entre para campo de ordenaçao: ");
-    // string_input(log_key, sizeof(log_key));
-    //
-    // printf("Entre o valor de busca: ");
-    // string_input(search_key, sizeof(search_key));
-    //
-    // int found = search_arr (buffer_arr, logs_arr, arr_size, log_key, search_key);
-    //
-    // printf("Resultado da busca: \n");
-    // int x = 0;
-    // while (found != 0){
-    // printf("%s, %s, %s, %s, %s\n",
-    //        buffer_arr[x].ID, buffer_arr[x].subject, buffer_arr[x].topic,
-    //        buffer_arr[x].start_date, buffer_arr[x].end_date);
-    //
-    //     x++;
-    //     found--;
-    // }
-    //
-    // printf("Last ID: %s\n", last_ID);
-/* -------------------------------------------------------------------------------- */
+    }
 
     free(logs_arr);
 }
@@ -308,24 +326,22 @@ int csv_parser (study_log *logs_arr, const char *file_name)
         if (row == 1)
             continue;
 
-        // Pointers for comma separation
         char *start = buffer;
         char *end;
 
-        // TODO: Enteder essa parte
         while (start != NULL)
         {
-            // Procura a próxima vírgula a partir do 'start'
+            // Find the position of the next comma starting from "start"
+            // and return its address in "end"
             end = strchr(start, ',');
 
-            // Se encontrou uma vírgula, substitui por '\0' para "cortar" a string ali
+            // Replace comma for NULL char
             if (end != NULL)
             {
                 *end = '\0'; 
             }
 
-            // O ponteiro 'start' agora contém o valor isolado da coluna atual
-            // (Mesmo se for vazio, ele conterá "")
+            // Copying the string to the current column.
             if (column == 0)
             {
                 strcpy (logs_arr[i].ID, start);
@@ -356,14 +372,14 @@ int csv_parser (study_log *logs_arr, const char *file_name)
                 strcpy (logs_arr[i].status, start);
             }
 
-            // Prepara para a próxima iteração
+            // For next string in the row
             if (end != NULL)
             {
-                start = end + 1; // Avança o 'start' para logo após a vírgula que cortamos
+                start = end + 1; // Next address immediately after "end"
             }
             else
             {
-                start = NULL; // Chegou no fim da linha (não tem mais vírgulas)
+                start = NULL; // End of the line
             }
 
             column++;
@@ -384,7 +400,7 @@ int execute_search (study_log *results_arr, study_log *logs_arr, const size_t ar
 
     if (results_count == 0)
     {
-        printf("Nothing found!\n");
+        printf("\n  Nothing found!\n\n");
         return 0;
     }
 
@@ -392,13 +408,16 @@ int execute_search (study_log *results_arr, study_log *logs_arr, const size_t ar
     printf("\nShowing the last %d match(es):", results_count);
     printf("\n---------------------------------------- Search Results ---------"
            "-------------------------------\n");
-    printf(BLUE "\n%-5s   %-15s   %-35s   %-10s   %-10s   %s\n" RESET,
+    printf(BLUE "%-5s | %-15s | %-35s | %-10s | %-10s | %s\n" RESET,
            "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
     for (int c = 0; c < results_count; c++)
     {
-        printf("%-5s | %-15s | %-35s | %-10s | %-10s | %s",
-           results_arr[c].ID, results_arr[c].subject, results_arr[c].topic,
-               results_arr[c].start_date, results_arr[c].end_date,
+        printf("%-5s | %-15s | %-35s | %-10s | %-10s | %s\n",
+               results_arr[c].ID,
+               results_arr[c].subject,
+               results_arr[c].topic,
+               results_arr[c].start_date,
+               results_arr[c].end_date,
                results_arr[c].status);
     }
     printf("\n");
@@ -412,7 +431,7 @@ int save_data (study_log *logs_arr,const size_t arr_size, const char *file_name)
     FILE *file = fopen (file_name, "w");
     if (file == NULL)
     {
-        printf ("Error: The study.csv file could not be opened.\n");
+        printf ("Error: The study.csv file could not be opened for save.\n");
         return -1;
     }
 
@@ -437,4 +456,27 @@ int save_data (study_log *logs_arr,const size_t arr_size, const char *file_name)
 
     printf("Data Saved in %s\n", file_name);
     return 0;
+}
+
+// Open a CSV file in the user's preferred application
+void open_csv_file (const char *file_name)
+{
+    char command[256];
+
+    // For Windows
+    #ifdef _WIN32
+        sprintf(command, "start %s", file_name);
+
+    // For Mac
+    #elif __APPLE__
+        sprintf(command, "open %s", file_name);
+
+    // For Linux
+    #else
+        sprintf(command, "xdg-open %s &", file_name);
+
+    #endif
+
+    // Execute the command to open the file
+    system(command);
 }

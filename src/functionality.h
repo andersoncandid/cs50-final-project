@@ -8,7 +8,7 @@
 #include "definitions.h"
 
 int string_input (char *buffer, const size_t buffer_size);
-void sort_arr (study_log *logs_arr, const size_t arr_size, const char *search_value);
+void sort_arr (study_log *array, const size_t arr_size, const char *sort_value);
 int search_arr (study_log *results_arr, study_log *logs_arr, const size_t arr_size,
                const char *search_member, const char *search_value);
 int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,

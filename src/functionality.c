@@ -8,6 +8,16 @@
 
 #include "definitions.h"
 
+// Prototype
+void trim_string(char *str);
+int id_cmp (const void *a, const void *b);
+int subj_cmp (const void *a, const void *b);
+int top_cmp (const void *a, const void *b);
+int start_cmp (const void *a, const void *b);
+int end_cmp (const void *a, const void *b);
+int status_cmp (const void *a, const void *b);
+int valid_date (const char *date);
+
 // Trimming white spaces from a string
 void trim_string(char *str)
 {
@@ -25,13 +35,13 @@ void trim_string(char *str)
 
     int start = 0, end = len - 1;
 
-    // Remove leading whitespace
+    // Go from start to the first of the non null chars
     while (isspace((unsigned char)str[start]))
     {
         start++;
     }
 
-    // Remove trailing whitespace
+    // Go backwards in the string reaching the last of non null chars
     while (end > start && isspace((unsigned char)str[end]))
     {
         end--;
@@ -48,7 +58,7 @@ void trim_string(char *str)
 // Safe string handling
 int string_input (char *buffer, const size_t buffer_size)
 {
-    // Ensuring the buffer is clear
+    // Initialize buffer
     buffer[0] = '\0';
 
     if (fgets (buffer, buffer_size, stdin) == NULL)
@@ -88,7 +98,14 @@ int id_cmp (const void *a, const void *b)
     const study_log *aa = (const study_log *)a;
     const study_log *bb = (const study_log *)b;
 
-    return strcmp (aa->ID, bb->ID);
+    // Convert strig to int
+    int id_a = atoi(aa->ID);
+    int id_b = atoi(bb->ID);
+
+    // Numeric Comparision
+    if (id_a < id_b) return -1;
+    if (id_a > id_b) return 1;
+    return 0;
 }
 
 int subj_cmp (const void *a, const void *b)
@@ -134,29 +151,29 @@ int status_cmp (const void *a, const void *b)
 // Creating an array of helper function pointers
 comp_func ptr_arr[6] = {&id_cmp, &subj_cmp, &top_cmp, &start_cmp, &end_cmp, &status_cmp};
 
-// Sorting logs_arr by value
-void sort_arr (study_log *logs_arr, const size_t arr_size, const char *search_value)
+// Sorting array by value
+void sort_arr (study_log *array, const size_t arr_size, const char *sort_value)
 {
     // Sorting according to the appropriate field
-    switch (*search_value)
+    switch (sort_value[0])
     {
-        case '0':
-            qsort(logs_arr, arr_size, sizeof(study_log), ptr_arr[0]);
-            break;
         case '1':
-            qsort(logs_arr, arr_size, sizeof(study_log), ptr_arr[1]);
+            qsort(array, arr_size, sizeof(study_log), ptr_arr[0]);
             break;
         case '2':
-            qsort(logs_arr, arr_size, sizeof(study_log), ptr_arr[2]);
+            qsort(array, arr_size, sizeof(study_log), ptr_arr[1]);
             break;
         case '3':
-            qsort(logs_arr, arr_size, sizeof(study_log), ptr_arr[3]);
+            qsort(array, arr_size, sizeof(study_log), ptr_arr[2]);
             break;
         case '4':
-            qsort(logs_arr, arr_size, sizeof(study_log), ptr_arr[4]);
+            qsort(array, arr_size, sizeof(study_log), ptr_arr[3]);
             break;
         case '5':
-            qsort(logs_arr, arr_size, sizeof(study_log), ptr_arr[5]);
+            qsort(array, arr_size, sizeof(study_log), ptr_arr[4]);
+            break;
+        case '6':
+            qsort(array, arr_size, sizeof(study_log), ptr_arr[5]);
             break;
         default:
             break;
@@ -178,7 +195,7 @@ int search_arr (study_log *results_arr, study_log *logs_arr, const size_t arr_si
     }
 
     // Sort by ID for retrieves the latest entries as search results
-    sort_arr (logs_arr, n, "0");
+    sort_arr (logs_arr, arr_size, "1");
 
     // Loop until end of array or reach max of found values
     for (int i = 0; i < (int)arr_size && n < MAX_RESULTS; i++)
@@ -194,22 +211,22 @@ int search_arr (study_log *results_arr, study_log *logs_arr, const size_t arr_si
         // Get the value from logs_arr that corresponds to the search_value
         switch (*search_member)
         {
-            case '0':
+            case '1':
                 target_value = logs_arr[last_index - i].ID;
                 break;
-            case '1':
+            case '2':
                 target_value = logs_arr[last_index - i].subject;
                 break;
-            case '2':
+            case '3':
                 target_value = logs_arr[last_index - i].topic;
                 break;
-            case '3':
+            case '4':
                 target_value = logs_arr[last_index - i].start_date;
                 break;
-            case '4':
+            case '5':
                 target_value = logs_arr[last_index - i].end_date;
                 break;
-            case '5':
+            case '6':
                 target_value = logs_arr[last_index - i].status;
                 break;
             default:
@@ -229,7 +246,12 @@ int search_arr (study_log *results_arr, study_log *logs_arr, const size_t arr_si
 
     regfree(&reegex);
 
-    sort_arr (results_arr, n, "0");
+    if (n > 0)
+    {
+        size_t results_size = n;
+        sort_arr (results_arr, results_size, "1");
+    }
+
     return n; // n == 0, Nothing found
 }
 
@@ -287,7 +309,7 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
     char confirm = 'n';
 
     do {
-        printf("\n--------------- Add New Log ---------------\n");
+        printf("-------------- Add New Entry --------------\n");
 
         // Verify if logs_arr is full
         if (*free_space <= 0)
@@ -395,11 +417,15 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
         }
 
         // Confirming the entry before updating logs_arr
-        printf(BLUE "\n%-5s   %-15s   %-35s   %-10s   %-10s   %s\n" RESET,
+        printf(BLUE "\n%-5s | %-15s | %-35s | %-10s | %-10s | %s\n" RESET,
                "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
         printf("%-5s | %-15s | %-35s | %-10s | %-10s | %s\n",
-               temp.ID, temp.subject, temp.topic, temp.start_date,
-               temp.end_date, temp.status);
+               temp.ID,
+               temp.subject,
+               temp.topic,
+               temp.start_date,
+               temp.end_date,
+               temp.status);
 
         printf("\nConfirm entry? (y/n): ");
         string_input (buffer, sizeof (buffer));
@@ -478,17 +504,23 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
     strcpy(temp.status, logs_arr[target_index].status);
 
     // Display target log
-    printf("\n------------------------------------------- Log Info ------------"
-           "-------------------------------\n");
-    printf(BLUE "\n%-5s   %-15s   %-35s   %-10s   %-10s   %s\n" RESET,
+    printf("\n----------------------------------------- Entries Info ---"
+           "--------------------------------------\n");
+    printf(BLUE "%-5s | %-15s | %-35s | %-10s | %-10s | %s\n" RESET,
            "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
     printf("%-5s | %-15s | %-35s | %-10s | %-10s | %s\n",
-           temp.ID, temp.subject, temp.topic, temp.start_date,
-           temp.end_date, temp.status);
+           temp.ID,
+           temp.subject,
+           temp.topic,
+           temp.start_date,
+           temp.end_date,
+           temp.status);
 
     // Get edit options
-    printf("1. Edit end date\n2. Edit Status\n3. Delete Log\n");
-    printf("\nSelect an option [1-3]: ");
+    printf("\n  1. Edit end date\n"
+           "  2. Edit Status\n"
+           "  3. Delete Entry\n"
+           "Select an option [1-3]: ");
     string_input (buffer, sizeof (buffer));
 
     // Validate input
@@ -501,7 +533,7 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
     switch (buffer[0])
     {
         case '1':
-            printf("\nEnter new end date [YYYY-MM-DD]: ");
+            printf("Enter new end date [YYYY-MM-DD]: ");
             string_input (buffer, sizeof (buffer));
             validate_date = valid_date(buffer);
 
@@ -528,7 +560,7 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
         break;
 
         case '2':
-            printf("\nEnter new status: ");
+            printf("Enter new status [0-1]: ");
             string_input (buffer, sizeof (buffer));
 
             // Validate status input
@@ -551,19 +583,19 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
         break;
 
         case '3':
-            printf("\nConfirm: Delete Log? (y/n): ");
+            printf("\nConfirm: Delete Entry? (y/n): ");
             string_input (buffer, sizeof (buffer));
 
-            if (tolower(buffer[0]) == 'y')
+            if (strlen(buffer) == 1 && tolower(buffer[0]) == 'y')
             {
                 // [status=2] to remove
                 strcpy(temp.status, "delete");
 
-                printf("  Log deleted!\n");
+                printf("  Entry deleted!\n");
             }
             else
             {
-                printf("  Log not deleted!\n");
+                printf("  Entry not deleted!\n");
             }
 
         break;
