@@ -263,7 +263,8 @@ int file_exists (const char *file_name)
     }
 }
 
-// Number of rows in the file
+// Get number of rows in the CSV file
+// Added '\r' check for Windows CRLF compatibility (suggested by Gemini)
 int count_rows (const char *file_name)
 {
     FILE *file = fopen (file_name, "r");
@@ -459,6 +460,7 @@ int save_data (study_log *logs_arr,const size_t arr_size, const char *file_name)
 }
 
 // Open a CSV file in the user's preferred application
+// Cross-platform portability logic adapted from a debugging with Gemini
 void open_csv_file (const char *file_name)
 {
     char command[256];

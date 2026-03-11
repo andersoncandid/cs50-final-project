@@ -19,6 +19,7 @@ int status_cmp (const void *a, const void *b);
 int valid_date (const char *date);
 
 // Trimming white spaces from a string
+// Logic adapted from: https://www.delftstack.com/howto/c/trim-string-in-c/
 void trim_string(char *str)
 {
     // Error check
@@ -56,6 +57,7 @@ void trim_string(char *str)
 }
 
 // Safe string handling
+// Logic debugged and optimized with Gemini
 int string_input (char *buffer, const size_t buffer_size)
 {
     // Initialize buffer
@@ -91,6 +93,9 @@ int string_input (char *buffer, const size_t buffer_size)
 
     return 0;
 }
+
+/* Application of an array of function pointers for comparison functions,
+ * suggested by Gemini */
 
 // String comparison helper functions
 int id_cmp (const void *a, const void *b)
@@ -184,6 +189,9 @@ void sort_arr (study_log *array, const size_t arr_size, const char *sort_value)
 int search_arr (study_log *results_arr, study_log *logs_arr, const size_t arr_size,
                const char *search_member, const char *search_value)
 {
+    /* Utilized Gemini to troubleshoot and polish
+    * Regex patterns for improved input validation */
+
     regex_t reegex;
     int n = 0;
     int last_index = (int)arr_size - 1;
