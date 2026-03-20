@@ -18,7 +18,7 @@ SOURCE_DIR = src
 
 # List of all the source files.
 SOURCE = \
-	stlog.c \
+	main.c \
 	functionality.c \
 
 INCLUDES = \

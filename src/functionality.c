@@ -19,7 +19,7 @@ int status_cmp (const void *a, const void *b);
 int valid_date (const char *date);
 
 // Trimming white spaces from a string
-// Logic adapted from: https://www.delftstack.com/howto/c/trim-string-in-c/
+// NOTE: Adapted from: https://www.delftstack.com/howto/c/trim-string-in-c/
 void trim_string(char *str)
 {
     // Error check
@@ -36,13 +36,13 @@ void trim_string(char *str)
 
     int start = 0, end = len - 1;
 
-    // Go from start to the first of the non null chars
+    // Loop from start to the first of the non null chars
     while (isspace((unsigned char)str[start]))
     {
         start++;
     }
 
-    // Go backwards in the string reaching the last of non null chars
+    // Loop backwards in the string reaching the last of non null chars
     while (end > start && isspace((unsigned char)str[end]))
     {
         end--;
@@ -57,7 +57,7 @@ void trim_string(char *str)
 }
 
 // Safe string handling
-// Logic debugged and optimized with Gemini
+// NOTE: Debugged and optimized with Gemini
 int string_input (char *buffer, const size_t buffer_size)
 {
     // Initialize buffer
@@ -94,8 +94,11 @@ int string_input (char *buffer, const size_t buffer_size)
     return 0;
 }
 
-/* Application of an array of function pointers for comparison functions,
- * suggested by Gemini */
+/*
+NOTE: Application of an array of function
+pointers for comparison functions,
+suggested by Gemini.
+*/
 
 // String comparison helper functions
 int id_cmp (const void *a, const void *b)
@@ -189,8 +192,10 @@ void sort_arr (study_log *array, const size_t arr_size, const char *sort_value)
 int search_arr (study_log *results_arr, study_log *logs_arr, const size_t arr_size,
                const char *search_member, const char *search_value)
 {
-    /* Utilized Gemini to troubleshoot and polish
-    * Regex patterns for improved input validation */
+     /*
+     NOTE: Utilized Gemini to troubleshoot and polish
+     regex patterns for improved input validation.
+     */
 
     regex_t reegex;
     int n = 0;
@@ -275,7 +280,7 @@ int valid_date (const char *date)
     }
 
     //  Validade hyphens
-    if (date[4] != 45 || date[7] != 45)
+    if (date[4] != '-' || date[7] != '-')
     {
         return 1;
     }
@@ -293,14 +298,14 @@ int valid_date (const char *date)
         }
     }
 
-    // Month tens digit > 1 and days > 3
-    if (date[5] > 49 && date[8] > 51)
+    // Month tens digit > 1 or days > 3
+    if (date[5] > '1' || date[8] > '3')
     {
         return 2;
     }
 
-    // MM > 12 and DD > 31
-    if ((date[5] == 49 && date[6] > 50) || (date[8] == 51 && date[9] > 49))
+    // Month entry[MM] > 12 or Day entry[DD] > 31
+    if ((date[5] == '1' && date[6] > '2') || (date[8] == '3' && date[9] > '1'))
     {
         return 2;
     }
@@ -341,17 +346,17 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
         strcpy (temp.ID, buffer);
 
         // Add new subject
-        printf("Enter subject: ");
+        printf("Subject: ");
         string_input (buffer, sizeof (buffer));
         strcpy (temp.subject, buffer);
 
         // Add new topic
-        printf("Enter topic: ");
+        printf("Topic: ");
         string_input (buffer, sizeof (buffer));
         strcpy (temp.topic, buffer);
 
         // Add new start_date
-        printf("Enter start date [YYYY-MM-DD]: ");
+        printf("Start date [YYYY-MM-DD]: ");
         string_input (buffer, sizeof (buffer));
         int validate_date = valid_date(buffer);
 
@@ -369,7 +374,7 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
                        "  (MM: 01-12, DD: 01-31)\n");
             }
 
-            printf("Enter start date: ");
+            printf("Start date: ");
             string_input (buffer, sizeof (buffer));
             validate_date = valid_date(buffer);
         }
@@ -377,7 +382,7 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
         strcpy (temp.start_date, buffer);
 
         // Add new end_date
-        printf("Enter end date [YYYY-MM-DD]: ");
+        printf("End date [YYYY-MM-DD]: ");
         string_input (buffer, sizeof (buffer));
         validate_date = valid_date(buffer);
 
@@ -395,7 +400,7 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
                        "  (MM: 01-12, DD: 01-31)\n");
             }
 
-            printf("Enter end date: ");
+            printf("End date: ");
             string_input (buffer, sizeof (buffer));
             validate_date = valid_date(buffer);
         }
@@ -407,7 +412,7 @@ int add_new (study_log **logs_arr, size_t *arr_size, size_t *free_space,
         string_input (buffer, sizeof (buffer));
 
         // Validate status input
-        while (strlen(buffer) > 1 || (buffer[0] != 48 && buffer[0] != 49))
+        while (strlen(buffer) > 1 || (buffer[0] != '0' && buffer[0] != '1'))
         {
             printf("Invalid input. Enter:"
                    " \n  [0] for In Progress\n  [1] for Completed");
@@ -532,7 +537,7 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
     string_input (buffer, sizeof (buffer));
 
     // Validate input
-    if (strlen(buffer) > 1 || (buffer[0] < 49 || buffer[0] > 51))
+    if (strlen(buffer) > 1 || (buffer[0] < '1' || buffer[0] > '3'))
     {
         printf("Invalid option\n");
         return 1;
@@ -541,7 +546,7 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
     switch (buffer[0])
     {
         case '1':
-            printf("Enter new end date [YYYY-MM-DD]: ");
+            printf("New end date [YYYY-MM-DD]: ");
             string_input (buffer, sizeof (buffer));
             validate_date = valid_date(buffer);
 
@@ -559,7 +564,7 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
                            "  (MM: 01-12, DD: 01-31)\n");
                 }
 
-                printf("Enter new end date: ");
+                printf("New end date: ");
                 string_input (buffer, sizeof (buffer));
                 validate_date = valid_date(buffer);
             }
@@ -568,15 +573,15 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
         break;
 
         case '2':
-            printf("Enter new status [0-1]: ");
+            printf("New status [0-1]: ");
             string_input (buffer, sizeof (buffer));
 
             // Validate status input
-            while (strlen(buffer) > 1 || (buffer[0] != 48 && buffer[0] != 49))
+            while (strlen(buffer) > 1 || (buffer[0] != '0' && buffer[0] != '1'))
             {
                 printf("Invalid input. Enter:"
                        " \n  [0] for In Progress\n  [1] for Completed");
-                printf("\nEnter new status: ");
+                printf("\nNew status: ");
                 string_input (buffer, sizeof (buffer));
             }
 
