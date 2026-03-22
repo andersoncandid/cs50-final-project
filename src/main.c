@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Final Project: Study Log (CS50x)
+ * Author: [Anderson Reinaldo Candido]
+ ******************************************************************************/
+
 #include <ctype.h>
 #include <stddef.h>
 #include <stdio.h>

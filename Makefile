@@ -9,7 +9,7 @@
 # See http://creativecommons.org/publicdomain/zero/1.0/
 
 # Output binary
-BIN = stlog
+BIN = studyLog
 
 # Put all auto generated stuff to this build dir.
 BUILD_DIR = ./build
