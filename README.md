@@ -170,7 +170,8 @@ export PATH="$HOME/.local/bin:$PATH"
 ```
 
 </details>
-***
+
+---
 
 ## Future Improvements
 
