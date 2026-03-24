@@ -1,6 +1,5 @@
 # Study Log
 
-#### Video Demo:
 
 Study Log is a command-line interface (CLI) program aimed at loging and organizing the progress of daily studied content in a simple and fast way.
 The program, lightweight and written entirely in C, allows storing, editing, searching, and viewing study logs through the terminal.
