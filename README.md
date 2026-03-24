@@ -26,8 +26,6 @@ The idea for the project came from a personal need for a simple study loging too
 - [Future Improvements](#future-improvements)
 - [References](#references)
 
-##
-
 ## Features
 
 ### Add new entry:
@@ -65,8 +63,6 @@ The data can be saved to the `userdata/study.csv` file by selecting the correspo
 ### Open CSV in an external program
 
 In this function, the program directs `study.csv` to the system's default spreadsheet program, as **cross-platform compatibility** (Linux, Mac, and Windows).
-
-##
 
 ## Design Decisions
 
@@ -118,8 +114,6 @@ In this function, the program directs `study.csv` to the system's default spread
 - **`stlog`**: Executable Bash script created to facilitate the global execution of the program via terminal.
 - `userdata/study.csv`: Saved user data.
 
-##
-
 ## How to Run the Project
 
 1. Clone the repository.
@@ -137,6 +131,8 @@ make
 ```
 
 (Note: To run the program from any directory in Linux without needing `./`, see the section below).
+
+---
 
 ### Global Installation (Linux - Optional)
 
@@ -174,15 +170,12 @@ export PATH="$HOME/.local/bin:$PATH"
 ```
 
 </details>
-
-##
+***
 
 ## Future Improvements
 
 For the project's MVP, I implemented input validation for most cases; for the future, I plan to implement it for _edge cases_.
 If maintenance complexity increases, as a future improvement, I plan to implement an SQLite database.
-
-##
 
 ## References
 
@@ -201,4 +194,3 @@ If maintenance complexity increases, as a future improvement, I plan to implemen
 
 - **C Programming for Everybody** by Dr. Charles R. Severance: [CC4E](https://www.cc4e.com/)
 - KERNIGHAN, Brian W.; RITCHIE, Dennis M. **The C Programming Language**. 2. ed. Englewood Cliffs, NJ: Prentice Hall, 1988.
-
