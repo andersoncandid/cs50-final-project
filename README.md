@@ -173,7 +173,7 @@ cp stlog $HOME/.local/bin/
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-<details>
+</details>
 
 ##
 
