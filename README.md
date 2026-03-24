@@ -8,14 +8,10 @@ Each log is subdivided into: subject, topic, start and end date, as well as the 
 The logs are saved in a CSV file that can be viewed in a spreadsheet editor.
 The idea for the project came from a personal need for a simple study loging tool that worked in the Linux terminal and can be a practical and concise assistant for any student who makes daily use of command-line programs.
 
----
-
-**About data manipulation**
-
-- Each study log is stored in a `char` `struct`: `study_log`, and the struct is added to a dynamic array.
-- On program startup, the CSV file with data from previous sessions is loaded into the array.
-
----
+> [!NOTE]**About data manipulation**
+>
+> - Each study log is stored in a `char` `struct`: `study_log`, and the struct is added to a dynamic array.
+> - On program startup, the CSV file with data from previous sessions is loaded into the array.
 
 ## Contents
 
@@ -132,12 +128,10 @@ make
 
 (Note: To run the program from any directory in Linux without needing `./`, see the section below).
 
----
-
-### Global Installation (Linux - Optional)
+#### Global Installation (Optional)
 
 <details>
-<summary></summary>
+<summary>Linux</summary>
 
 1. Configure the directory path:
    Open the `stlog` script in your text editor (like VS Code) and change the `BIN_PATH` variable to the absolute path of the program's root folder.
@@ -163,15 +157,13 @@ cp stlog $HOME/.local/bin/
 ```
 
 4. Verify your PATH
-   Make sure the `~/.local/bin/` folder is included in your system's PATH. If not, add the line below to the end of your `~/.bashrc` file:
+   Make sure the `~/.local/bin/` folder is included in your system's PATH. If not, add the line below to the end of your shell configuration file (e.g., `~/.bashrc`):
 
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
 </details>
-
----
 
 ## Future Improvements
 
