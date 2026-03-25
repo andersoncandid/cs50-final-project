@@ -517,7 +517,7 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
     strcpy(temp.status, logs_arr[target_index].status);
 
     // Display target log
-    printf("\n----------------------------------------- Entries Info ---"
+    printf("\n------------------------------------------ Entry Info ----"
            "--------------------------------------\n");
     printf(BLUE "%-5s | %-15s | %-35s | %-10s | %-10s | %s\n" RESET,
            "ID", "Subject", "Topic", "Start Date", "End Date", "Status");
@@ -530,14 +530,16 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
            temp.status);
 
     // Get edit options
-    printf("\n  1. Edit end date\n"
-           "  2. Edit Status\n"
-           "  3. Delete Entry\n"
-           "Select an option [1-3]: ");
+    printf("\n=== Edit options ===\n"
+           "1. Edit end date\n"
+           "2. Edit Status\n"
+           "3. Delete Entry\n"
+           "4. Return to menu\n"
+           "\nSelect an edit option [1-4]: ");
     string_input (buffer, sizeof (buffer));
 
     // Validate input
-    if (strlen(buffer) > 1 || (buffer[0] < '1' || buffer[0] > '3'))
+    if (strlen(buffer) > 1 || (buffer[0] < '1' || buffer[0] > '4'))
     {
         printf("Invalid option\n");
         return 1;
@@ -573,7 +575,8 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
         break;
 
         case '2':
-            printf("New status [0-1]: ");
+            printf("  [0] for In Progress\n  [1] for Completed");
+            printf("\nNew status: ");
             string_input (buffer, sizeof (buffer));
 
             // Validate status input
@@ -612,6 +615,9 @@ int edit_log (study_log *logs_arr, const size_t arr_size, const int target_index
             }
 
         break;
+
+        case '4':
+            break;
 
         default:
             break;

@@ -1,14 +1,12 @@
 # Study Log
 
-
 Study Log is a command-line interface (CLI) program aimed at loging and organizing the progress of daily studied content in a simple and fast way.
 The program, lightweight and written entirely in C, allows storing, editing, searching, and viewing study logs through the terminal.
 Each log is subdivided into: subject, topic, start and end date, as well as the current study status, striving to be minimalist and objective.
 The logs are saved in a CSV file that can be viewed in a spreadsheet editor.
 The idea for the project came from a personal need for a simple study loging tool that worked in the Linux terminal and can be a practical and concise assistant for any student who makes daily use of command-line programs.
 
-> [!NOTE]
-> **About data manipulation**
+> [!NOTE]**About data manipulation**
 >
 > - Each study log is stored in a `char` `struct`: `study_log`, and the struct is added to a dynamic array.
 > - On program startup, the CSV file with data from previous sessions is loaded into the array.
@@ -66,6 +64,11 @@ In this function, the program directs `study.csv` to the system's default spread
 
 - I chose the size of each entry in the `study_log` struct so that there was more than enough size for an expected entry.
 - Because it involves a low volume of data, I chose **not to use an external database**, thus I used the `qsort` sorting algorithm and implemented a linear search with regex.
+
+**ID Tracking**
+
+- When the program starts and loads the data into logs_arr, the array is sorted by ID and the last value is stored as last_ID.
+- When adding a new entry, it is assigned the next available ID and last_ID is updated to this new value.
 
 **UI/UX**
 
@@ -187,3 +190,4 @@ If maintenance complexity increases, as a future improvement, I plan to implemen
 
 - **C Programming for Everybody** by Dr. Charles R. Severance: [CC4E](https://www.cc4e.com/)
 - KERNIGHAN, Brian W.; RITCHIE, Dennis M. **The C Programming Language**. 2. ed. Englewood Cliffs, NJ: Prentice Hall, 1988.
+

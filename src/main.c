@@ -1,7 +1,7 @@
 /*******************************************************************************
   CS50x Final Project
   Title: Study Log
-  Author: [Anderson Reinaldo Candido]
+  Author: Anderson Reinaldo Candido
  ******************************************************************************/
 
 #include <ctype.h>
@@ -101,7 +101,7 @@ int main ()
         }
 
         // Prompt user for menu selection
-        printf("Select an option [1-8, 0 for menu]: ");
+        printf("\nSelect an option [1-8, 0 for menu]: ");
         string_input (menu_opt, sizeof (menu_opt));
 
         // Validate input
@@ -402,7 +402,7 @@ int csv_parser (study_log *logs_arr, const char *file_name)
 // Main menu interface
 void main_menu ()
 {
-    printf("================================\n%20s\n"
+    printf("\n================================\n%20s\n"
            "================================\n", "STUDY LOG");
     printf(" 1. Add new entry\n"
            " 2. Search study entries\n"
