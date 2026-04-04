@@ -41,6 +41,7 @@ int main ()
 
         // Write the header to the new file, so as not to generate an empty file
         fprintf(new_file, "ID,Subject,Topic,Start Date,End Date,Status\n");
+
         fclose (new_file);
     }
 
